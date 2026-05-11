@@ -12,3 +12,6 @@ uploads/
 temp/
 .vscode/
 .idea/
+
+# Keep .env.render as reference but don't commit with real secrets
+.env.render
