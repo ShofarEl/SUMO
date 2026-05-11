@@ -1,20 +1,11 @@
 import rateLimit from 'express-rate-limit';
 import logger from '../utils/logger.js';
 
-// Helper to generate IPv6-safe keys
-const generateKey = (req) => {
-  if (req.user) {
-    return `user:${req.user._id.toString()}`;
-  }
-  // Use the built-in IP handling which is IPv6-safe
-  return `ip:${req.ip}`;
-};
-
 // General API rate limiter - DISABLED IN DEVELOPMENT
 export const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: process.env.NODE_ENV === 'production' ? 100 : 999999, // Essentially unlimited in dev
-  skip: () => process.env.NODE_ENV !== 'production', // Skip entirely in development
+  max: process.env.NODE_ENV === 'production' ? 100 : 999999,
+  skip: () => process.env.NODE_ENV !== 'production',
   message: {
     success: false,
     error: {
@@ -41,8 +32,8 @@ export const apiLimiter = rateLimit({
 // Stricter rate limiter for authentication endpoints - DISABLED IN DEVELOPMENT
 export const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: process.env.NODE_ENV === 'production' ? 5 : 999999, // Essentially unlimited in dev
-  skip: () => process.env.NODE_ENV !== 'production', // Skip entirely in development
+  max: process.env.NODE_ENV === 'production' ? 5 : 999999,
+  skip: () => process.env.NODE_ENV !== 'production',
   skipSuccessfulRequests: true,
   message: {
     success: false,
@@ -67,8 +58,8 @@ export const authLimiter = rateLimit({
 
 // Rate limiter for file uploads
 export const uploadLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 10, // Limit each IP to 10 uploads per hour
+  windowMs: 60 * 60 * 1000,
+  max: 10,
   message: {
     success: false,
     error: {
@@ -84,7 +75,6 @@ export const createUserRateLimiter = (windowMs = 15 * 60 * 1000, max = 200) => {
   return rateLimit({
     windowMs,
     max,
-    keyGenerator: generateKey,
     message: {
       success: false,
       error: {
@@ -110,9 +100,8 @@ export const createUserRateLimiter = (windowMs = 15 * 60 * 1000, max = 200) => {
 
 // Simulation execution rate limiter (expensive operations)
 export const simulationLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 20, // Limit to 20 simulations per hour per user
-  keyGenerator: generateKey,
+  windowMs: 60 * 60 * 1000,
+  max: 20,
   message: {
     success: false,
     error: {
@@ -125,9 +114,8 @@ export const simulationLimiter = rateLimit({
 
 // Training rate limiter (very expensive operations)
 export const trainingLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5, // Limit to 5 training jobs per hour per user
-  keyGenerator: generateKey,
+  windowMs: 60 * 60 * 1000,
+  max: 5,
   message: {
     success: false,
     error: {

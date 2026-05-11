@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import mongoose from 'mongoose';
 import connectDB from './config/database.js';
 import { createServer, httpsRedirect } from './config/https.js';
 import { errorHandler } from './middleware/errorHandler.js';
