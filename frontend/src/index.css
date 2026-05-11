@@ -12,7 +12,7 @@
 
 /* Reduce all font sizes by 10% (was 25%, increased by 20%) */
 html {
-  font-size: 14.4px; /* Default is 16px, 90% = 14.4px */
+  font-size: 16px; /* Base font size set to 16px */
 }
 
 @layer components {

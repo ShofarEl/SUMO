@@ -68,6 +68,7 @@ const GLOBAL_CSS = `
 /* HERO CONTENT */
 .eg-hero-content { position: relative; z-index: 5; flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 3.5rem 3.5rem; max-width: 740px; }
 .eg-hero-h1 { font-size: clamp(1.75rem, 4vw, 3rem); font-weight: 800; color: #fff; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 1.125rem; }
+.eg-hero-h1-size { font-size: 18px; }
 
 /* LAYOUT */
 .eg-section { padding: 5rem 0; }
@@ -99,7 +100,8 @@ const GLOBAL_CSS = `
   .eg-nav-actions { display: none; }
   .eg-hamburger { display: block; }
 
-  .eg-hero-content { padding: 2.5rem 1.25rem; max-width: 100%; }
+  .eg-hero-content { padding: 2rem 1.25rem; max-width: 100%; padding-top: 1rem; }
+  .eg-hero-h1 { font-size: 1.75rem; }
 
   .eg-section { padding: 3.5rem 0; }
   .eg-section-grey { padding: 3.5rem 0; }
