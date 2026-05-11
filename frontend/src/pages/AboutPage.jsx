@@ -37,7 +37,7 @@ const ABOUT_CSS = `
 .about-mobile-menu a { padding: 0.875rem 1.5rem; color: rgba(255,255,255,0.78); text-decoration: none; font-size: 0.9375rem; font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.06); }
 `;
 
-export default function AboutPage() {
+const AboutPage =()=> {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -300,3 +300,5 @@ export default function AboutPage() {
     </div>
   );
 }
+
+export default AboutPage
