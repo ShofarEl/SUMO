@@ -1,0 +1,30 @@
+{
+  "project": "Georgetown AI Traffic Management",
+  "location": "Georgetown, Guyana",
+  "corridor": "Sheriff Street / Vlissengen Road",
+  "baseline": {
+    "average_delay": 42.71,
+    "average_queue": 10.92,
+    "throughput": 2545,
+    "control": "Fixed Timing"
+  },
+  "dqn_results": {
+    "average_delay": 27.45,
+    "average_queue": 6.6,
+    "episodes": 50,
+    "control": "DQN AI Agent"
+  },
+  "improvements": {
+    "delay_reduction": "35.7%",
+    "queue_reduction": "39.6%"
+  },
+  "roads": [
+    "Sheriff Street",
+    "Vlissengen Road",
+    "Camp Street",
+    "Church Street",
+    "Durban Street",
+    "Regent Street",
+    "Carmichael Street"
+  ]
+}

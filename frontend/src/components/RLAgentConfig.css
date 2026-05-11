@@ -1,0 +1,328 @@
+.rl-agent-config {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.config-form {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.config-form h2 {
+  margin: 0 0 30px 0;
+  color: #1a1a1a;
+  font-size: 24px;
+  border-bottom: 2px solid #2196F3;
+  padding-bottom: 10px;
+}
+
+.form-section {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
+}
+
+.form-section h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.section-header h3 {
+  margin: 0;
+}
+
+.section-description {
+  margin: 0 0 15px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="range"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.form-group input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
+}
+
+.checkbox-label {
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #2196F3;
+}
+
+.form-group input.error,
+.form-group select.error {
+  border-color: #f44336;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 5px;
+  color: #666;
+  font-size: 12px;
+}
+
+.error-message {
+  display: block;
+  margin-top: 5px;
+  color: #f44336;
+  font-size: 12px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+/* Intersections */
+.intersections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.intersection-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.intersection-item input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Preset Buttons */
+.preset-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-preset {
+  padding: 6px 12px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-preset:hover {
+  background: #e0e0e0;
+  border-color: #2196F3;
+}
+
+/* Advanced Parameters */
+.advanced-section {
+  margin-top: 20px;
+}
+
+.btn-toggle-advanced {
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: #2196F3;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.2s;
+}
+
+.btn-toggle-advanced:hover {
+  color: #1976D2;
+}
+
+.advanced-params {
+  margin-top: 15px;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 4px;
+  border-left: 3px solid #2196F3;
+}
+
+/* Buttons */
+.btn-primary,
+.btn-secondary,
+.btn-remove,
+.btn-small {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #2196F3;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1976D2;
+}
+
+.btn-secondary {
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+  background: #e0e0e0;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.btn-remove {
+  padding: 8px 16px;
+  background: #f44336;
+  color: white;
+  font-size: 13px;
+}
+
+.btn-remove:hover {
+  background: #da190b;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.form-actions .btn-primary,
+.form-actions .btn-secondary {
+  padding: 12px 30px;
+  font-size: 16px;
+}
+
+/* Range Input Styling */
+input[type="range"] {
+  height: 6px;
+  background: #ddd;
+  border-radius: 3px;
+  outline: none;
+  padding: 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #2196F3;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #2196F3;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rl-agent-config {
+    padding: 10px;
+  }
+
+  .config-form {
+    padding: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .preset-buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions .btn-primary,
+  .form-actions .btn-secondary {
+    width: 100%;
+  }
+
+  .intersection-item {
+    flex-direction: column;
+  }
+
+  .intersection-item input {
+    width: 100%;
+  }
+}

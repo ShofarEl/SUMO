@@ -1,0 +1,124 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: georgetown-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:5000
+      - VITE_WS_URL=ws://localhost:5000
+    depends_on:
+      - backend
+    networks:
+      - georgetown-network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: georgetown-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - ./backend/logs:/app/logs
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongodb:27017/georgetown-traffic-ai
+      - REDIS_URL=redis://redis:6379
+      - PYTHON_AI_SERVICE_URL=http://python-ai:8000
+      - JWT_SECRET=your-secret-key-change-in-production
+      - JWT_EXPIRE=7d
+      - JWT_REFRESH_EXPIRE=30d
+      - CORS_ORIGIN=http://localhost:3000
+      - LOG_LEVEL=info
+    depends_on:
+      - mongodb
+      - redis
+      - python-ai
+    networks:
+      - georgetown-network
+    restart: unless-stopped
+
+  python-ai:
+    build:
+      context: ./python-ai
+      dockerfile: Dockerfile
+    container_name: georgetown-python-ai
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./python-ai:/app
+      - sumo-data:/app/sumo_data
+      - ./python-ai/models:/app/models
+      - ./python-ai/logs:/app/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ENVIRONMENT=development
+      - HOST=0.0.0.0
+      - PORT=8000
+      - MONGODB_URI=mongodb://mongodb:27017/georgetown-traffic-ai
+      - SUMO_HOME=/usr/share/sumo
+      - MODEL_STORAGE_PATH=/app/models
+      - LOG_LEVEL=INFO
+    depends_on:
+      - mongodb
+    networks:
+      - georgetown-network
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:6
+    container_name: georgetown-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+      - mongodb-config:/data/configdb
+    environment:
+      - MONGO_INITDB_DATABASE=georgetown-traffic-ai
+    networks:
+      - georgetown-network
+    restart: unless-stopped
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/georgetown-traffic-ai --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: georgetown-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - georgetown-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+networks:
+  georgetown-network:
+    driver: bridge
+
+volumes:
+  mongodb-data:
+  mongodb-config:
+  redis-data:
+  sumo-data:

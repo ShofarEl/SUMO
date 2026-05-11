@@ -1,0 +1,236 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -58.16,
+            6.798
+          ],
+          [
+            -58.157,
+            6.799
+          ],
+          [
+            -58.154,
+            6.8
+          ],
+          [
+            -58.151,
+            6.801
+          ],
+          [
+            -58.148,
+            6.802
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Sheriff Street",
+        "highway": "primary",
+        "congestion": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -58.155,
+            6.795
+          ],
+          [
+            -58.155,
+            6.797
+          ],
+          [
+            -58.155,
+            6.799
+          ],
+          [
+            -58.155,
+            6.801
+          ],
+          [
+            -58.155,
+            6.803
+          ],
+          [
+            -58.155,
+            6.805
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Vlissengen Road",
+        "highway": "primary",
+        "congestion": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -58.162,
+            6.81
+          ],
+          [
+            -58.159,
+            6.81
+          ],
+          [
+            -58.156,
+            6.81
+          ],
+          [
+            -58.153,
+            6.81
+          ],
+          [
+            -58.15,
+            6.81
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Camp Street",
+        "highway": "secondary",
+        "congestion": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -58.16,
+            6.796
+          ],
+          [
+            -58.16,
+            6.798
+          ],
+          [
+            -58.16,
+            6.8
+          ],
+          [
+            -58.16,
+            6.802
+          ],
+          [
+            -58.16,
+            6.804
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Church Street",
+        "highway": "secondary",
+        "congestion": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -58.165,
+            6.805
+          ],
+          [
+            -58.162,
+            6.805
+          ],
+          [
+            -58.159,
+            6.805
+          ],
+          [
+            -58.156,
+            6.805
+          ],
+          [
+            -58.153,
+            6.805
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Durban Street",
+        "highway": "secondary",
+        "congestion": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -58.163,
+            6.797
+          ],
+          [
+            -58.161,
+            6.7975
+          ],
+          [
+            -58.159,
+            6.798
+          ],
+          [
+            -58.157,
+            6.7985
+          ],
+          [
+            -58.155,
+            6.799
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Regent Street",
+        "highway": "primary",
+        "congestion": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -58.158,
+            6.796
+          ],
+          [
+            -58.158,
+            6.798
+          ],
+          [
+            -58.158,
+            6.8
+          ],
+          [
+            -58.158,
+            6.802
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Carmichael Street",
+        "highway": "secondary",
+        "congestion": "medium"
+      }
+    }
+  ]
+}
