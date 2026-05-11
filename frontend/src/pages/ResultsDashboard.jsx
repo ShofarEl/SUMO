@@ -1,10 +1,23 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 import 'leaflet/dist/leaflet.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+const IconMenu = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+);
+
+const IconClose = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+);
 
 export default function ResultsDashboard() {
   const [loading, setLoading] = useState(true);
@@ -13,6 +26,7 @@ export default function ResultsDashboard() {
   const [agents, setAgents] = useState([]);
   const [trainingData, setTrainingData] = useState([]);
   const [error, setError] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -107,19 +121,63 @@ export default function ResultsDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <style>{`
+        @media (max-width: 768px) {
+          .results-nav-links { display: none !important; }
+          .results-hamburger { display: block !important; }
+          .results-mobile-menu.open { display: flex !important; }
+          .results-data-badge { display: none !important; }
+        }
+        .results-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+        .results-mobile-menu { display: none; flex-direction: column; background: rgba(7,18,40,0.98); border-top: 1px solid rgba(255,255,255,0.08); }
+        .results-mobile-menu a { padding: 0.875rem 1.5rem; color: rgba(255,255,255,0.78); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+      `}</style>
+
+      {/* Navigation Header */}
+      <div className="bg-gradient-to-r from-blue-900 to-blue-800 shadow-lg">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link to="/" className="text-white font-bold text-lg">
+              Georgetown Traffic AI
+            </Link>
+            
+            <div className="results-nav-links flex items-center space-x-6">
+              <Link to="/" className="text-white/80 hover:text-white text-sm font-medium transition">Home</Link>
+              <Link to="/results" className="text-white text-sm font-medium">Results</Link>
+              <Link to="/simulations" className="text-white/80 hover:text-white text-sm font-medium transition">Simulations</Link>
+              <Link to="/about" className="text-white/80 hover:text-white text-sm font-medium transition">About</Link>
+              <Link to="/login" className="text-white/80 hover:text-white text-sm font-medium transition">Sign In</Link>
+            </div>
+
+            <button className="results-hamburger text-white" onClick={() => setMenuOpen(o => !o)}>
+              {menuOpen ? <IconClose /> : <IconMenu />}
+            </button>
+          </div>
+        </nav>
+
+        {/* Mobile Menu */}
+        <div className={`results-mobile-menu ${menuOpen ? 'open' : ''}`}>
+          <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+          <Link to="/results" onClick={() => setMenuOpen(false)}>Results</Link>
+          <Link to="/simulations" onClick={() => setMenuOpen(false)}>Simulations</Link>
+          <Link to="/about" onClick={() => setMenuOpen(false)}>About</Link>
+          <Link to="/login" onClick={() => setMenuOpen(false)} style={{ borderBottom: 'none' }}>Sign In</Link>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Georgetown Traffic AI - Results Dashboard
+                Research Results Dashboard
               </h1>
               <p className="mt-2 text-gray-600">
                 Sheriff Street Corridor • Deep Q-Network Analysis
               </p>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="results-data-badge flex items-center space-x-2">
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                 <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
                 Data Loaded

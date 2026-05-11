@@ -26,7 +26,12 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex" style={{ touchAction: 'manipulation' }}>
+      <style>{`
+        input, textarea, select {
+          font-size: 16px !important;
+        }
+      `}</style>
       {/* Left Panel - Traffic Image */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-black">
         {/* Background Image - Traffic/City */}
