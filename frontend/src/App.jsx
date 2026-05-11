@@ -17,7 +17,7 @@ import SystemConfigPage from './pages/SystemConfigPage';
 import LogsViewerPage from './pages/LogsViewerPage';
 import ElegantDashboard from './pages/ElegantDashboard';
 import ResultsDashboard from './pages/ResultsDashboard';
-import AboutPage from './pages/AboutPage';
+import { AboutPage } from './pages/AboutPage';
 function App() {
   return (
     <Router>
