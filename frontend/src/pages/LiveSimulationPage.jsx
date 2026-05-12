@@ -59,82 +59,118 @@ function makeSignals() {
   }));
 }
 
-function drawCanvas(canvas, vehicles, signals, isDark) {
-  const W = canvas.width;
-  const H = canvas.height;
+// ─── IMPROVED DRAW FUNCTION ───────────────────────────────────────────────────
+function drawCanvas(canvas, vehicles, signals) {
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.width / dpr;
+  const H = canvas.height / dpr;
   const ctx = canvas.getContext("2d");
-  ctx.clearRect(0, 0, W, H);
-  
-  // Darker background for better contrast
-  ctx.fillStyle = isDark ? "#0a0a0a" : "#f0f0ed";
+
+  ctx.save();
+  ctx.scale(dpr, dpr);
+
+  // ── Background: dark asphalt ──
+  ctx.fillStyle = "#0d1117";
   ctx.fillRect(0, 0, W, H);
 
-  const roadFill = isDark ? "#1a1a1a" : "#d8d8d4";
-  const roadEdge = isDark ? "#2a2a2a" : "#b8b8b4";
-  const dashColor = isDark ? "#404040" : "#ffffff";
-  const labelColor = isDark ? "#888" : "#666";
+  // subtle grid texture
+  ctx.strokeStyle = "rgba(255,255,255,0.018)";
+  ctx.lineWidth = 0.5;
+  for (let gx = 0; gx < W; gx += 18) {
+    ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+  }
+  for (let gy = 0; gy < H; gy += 18) {
+    ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+  }
 
-  // Draw roads with better definition
+  const roadW = Math.max(W, H) * 0.09; // road half-width
+
+  // ── 1. Road shadows (depth) ──
   ROADS.forEach((r) => {
     const x1 = r.x1 * W, y1 = r.y1 * H, x2 = r.x2 * W, y2 = r.y2 * H;
-    const isH = r.axis === "h";
-    const hw = isH ? H * 0.08 : W * 0.08; // Wider roads
+    ctx.strokeStyle = "rgba(0,0,0,0.55)";
+    ctx.lineWidth = roadW * 2 + 10;
+    ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  });
 
-    // Road border
-    ctx.strokeStyle = roadEdge;
-    ctx.lineWidth = hw + 6;
+  // ── 2. Road surface ──
+  ROADS.forEach((r) => {
+    const x1 = r.x1 * W, y1 = r.y1 * H, x2 = r.x2 * W, y2 = r.y2 * H;
+
+    // Road body
+    ctx.strokeStyle = "#1c2333";
+    ctx.lineWidth = roadW * 2;
     ctx.lineCap = "round";
     ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
 
-    // Road surface
-    ctx.strokeStyle = roadFill;
-    ctx.lineWidth = hw;
+    // Road edge lines
+    ctx.strokeStyle = "rgba(255,255,255,0.08)";
+    ctx.lineWidth = 0.8;
+    ctx.setLineDash([]);
     ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  });
 
-    // Center line - more visible
-    ctx.strokeStyle = dashColor;
-    ctx.setLineDash([10, 10]);
-    ctx.lineWidth = 1.5;
+  // ── 3. Center lane dashes ──
+  ROADS.forEach((r) => {
+    const x1 = r.x1 * W, y1 = r.y1 * H, x2 = r.x2 * W, y2 = r.y2 * H;
+    ctx.strokeStyle = "rgba(255,220,0,0.22)";
+    ctx.lineWidth = 1.2;
+    ctx.setLineDash([10, 12]);
+    ctx.lineDashOffset = 0;
     ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
     ctx.setLineDash([]);
   });
 
-  // Draw intersections with animated traffic lights
+  // ── 4. Intersection boxes ──
   INTERSECTIONS.forEach((inter, idx) => {
     const sig = signals[idx];
     const ix = inter.x * W, iy = inter.y * H;
-    const hw = W * 0.08;
+    const hw = roadW;
 
-    // Intersection box
-    ctx.fillStyle = roadFill;
-    ctx.fillRect(ix - hw / 2, iy - hw / 2, hw, hw);
+    // Intersection fill
+    ctx.fillStyle = "#1a2030";
+    ctx.fillRect(ix - hw, iy - hw, hw * 2, hw * 2);
 
-    // Traffic light with dramatic glow
-    const glow = sig.green ? "#10b981" : "#ef4444";
-    const lightSize = 8;
+    // Crosswalk stripes
+    const stripeCount = 4;
+    const stripeW = (hw * 2) / (stripeCount * 2 - 1);
+    ctx.fillStyle = "rgba(255,255,255,0.055)";
+    for (let s = 0; s < stripeCount; s++) {
+      const sx = ix - hw + s * stripeW * 2;
+      ctx.fillRect(sx, iy - hw, stripeW, hw * 2);
+    }
+
+    // Signal light — glowing dot on corner
+    const isGreen = sig.green;
+    const sigColor = isGreen ? "#22c55e" : "#ef4444";
+    const glowColor = isGreen ? "rgba(34,197,94,0.6)" : "rgba(239,68,68,0.6)";
 
     // Outer glow
-    ctx.shadowColor = glow;
-    ctx.shadowBlur = 20;
-    ctx.fillStyle = glow;
-    ctx.globalAlpha = 0.3;
+    const grad = ctx.createRadialGradient(ix + hw * 0.68, iy - hw * 0.68, 0, ix + hw * 0.68, iy - hw * 0.68, hw * 0.45);
+    grad.addColorStop(0, glowColor);
+    grad.addColorStop(1, "transparent");
+    ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.arc(ix + hw * 0.42, iy - hw * 0.42, lightSize + 4, 0, Math.PI * 2);
+    ctx.arc(ix + hw * 0.68, iy - hw * 0.68, hw * 0.45, 0, Math.PI * 2);
     ctx.fill();
 
-    // Inner light
-    ctx.globalAlpha = 1;
-    ctx.shadowBlur = 12;
-    ctx.fillStyle = glow;
+    // Signal dot
+    ctx.fillStyle = sigColor;
+    ctx.shadowColor = sigColor;
+    ctx.shadowBlur = 14;
     ctx.beginPath();
-    ctx.arc(ix + hw * 0.42, iy - hw * 0.42, lightSize, 0, Math.PI * 2);
+    ctx.arc(ix + hw * 0.68, iy - hw * 0.68, 5.5, 0, Math.PI * 2);
     ctx.fill();
-
     ctx.shadowBlur = 0;
-    ctx.globalAlpha = 1;
+
+    // Thin border around intersection
+    ctx.strokeStyle = "rgba(255,255,255,0.06)";
+    ctx.lineWidth = 0.8;
+    ctx.strokeRect(ix - hw, iy - hw, hw * 2, hw * 2);
   });
 
-  // Draw vehicles - BIGGER and more dramatic
+  // ── 5. Vehicles ──
   vehicles.forEach((v) => {
     let vx, vy;
     if (v.axis === "h") {
@@ -145,46 +181,82 @@ function drawCanvas(canvas, vehicles, signals, isDark) {
       vy = v.pos * H;
     }
 
-    // Dramatic colors
-    const color = v.queued ? "#ef4444" : "#10b981";
-    const angle = v.axis === "h" ? (v.dir > 0 ? 0 : Math.PI) : Math.PI / 2;
+    const isQueued = v.queued;
+    const bodyColor = isQueued ? "#f87171" : "#60a5fa";
+    const glowCol = isQueued ? "rgba(248,113,113,0.7)" : "rgba(96,165,250,0.7)";
+    const angle = v.axis === "h" ? (v.dir > 0 ? 0 : Math.PI) : (v.dir > 0 ? Math.PI / 2 : -Math.PI / 2);
 
     ctx.save();
     ctx.translate(vx, vy);
     ctx.rotate(angle);
 
-    // Vehicle shadow
-    ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
-    ctx.fillRect(-8, -4, 16, 8);
+    // Headlight glow ahead
+    if (!isQueued) {
+      const headGrad = ctx.createRadialGradient(7, 0, 0, 7, 0, 14);
+      headGrad.addColorStop(0, "rgba(200,220,255,0.45)");
+      headGrad.addColorStop(1, "transparent");
+      ctx.fillStyle = headGrad;
+      ctx.beginPath();
+      ctx.arc(7, 0, 14, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
-    // Vehicle body - BIGGER
-    ctx.fillStyle = color;
-    ctx.shadowColor = color;
-    ctx.shadowBlur = v.queued ? 8 : 4;
-    ctx.fillRect(-9, -4.5, 18, 9);
+    // Vehicle glow
+    ctx.shadowColor = glowCol;
+    ctx.shadowBlur = 10;
 
-    // Vehicle highlight
+    // Vehicle body
+    ctx.fillStyle = bodyColor;
+    ctx.beginPath();
+    ctx.roundRect(-7, -3.5, 14, 7, 2.5);
+    ctx.fill();
+
+    // Windshield glint
+    ctx.fillStyle = "rgba(255,255,255,0.35)";
+    ctx.beginPath();
+    ctx.roundRect(1, -2.5, 4, 5, 1);
+    ctx.fill();
+
     ctx.shadowBlur = 0;
-    ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
-    ctx.fillRect(-7, -3, 10, 3);
-
     ctx.restore();
   });
 
-  // Road labels - more prominent
-  ctx.shadowBlur = 0;
-  ctx.font = `bold ${Math.max(11, W * 0.04)}px sans-serif`;
-  ctx.fillStyle = labelColor;
-  ctx.strokeStyle = isDark ? "#000" : "#fff";
-  ctx.lineWidth = 3;
+  // ── 6. Road name labels ──
+  const labelCfg = [
+    { text: "Sheriff St",    x: W * 0.065, y: H * 0.35 - roadW - 5, align: "left"   },
+    { text: "Camp St",       x: W * 0.065, y: H * 0.65 - roadW - 5, align: "left"   },
+    { text: "Regent St",     x: W * 0.065, y: H * 0.55 - roadW - 5, align: "left"   },
+    { text: "Church St",     x: W * 0.25 + roadW + 4,  y: H * 0.12, align: "left"   },
+    { text: "Vlissengen Rd", x: W * 0.55 + roadW + 4,  y: H * 0.12, align: "left"   },
+  ];
 
-  ctx.strokeText("Sheriff St", W * 0.06, H * 0.35 - 12);
-  ctx.fillText("Sheriff St", W * 0.06, H * 0.35 - 12);
+  ctx.font = `600 ${Math.max(9, W * 0.028)}px 'DM Mono', monospace`;
+  ctx.letterSpacing = "0.04em";
 
-  ctx.strokeText("Camp St", W * 0.06, H * 0.65 - 12);
-  ctx.fillText("Camp St", W * 0.06, H * 0.65 - 12);
+  labelCfg.forEach(({ text, x, y, align }) => {
+    ctx.textAlign = align;
+    // label background pill
+    const tw = ctx.measureText(text).width;
+    const pad = 4;
+    ctx.fillStyle = "rgba(0,0,0,0.55)";
+    ctx.beginPath();
+    ctx.roundRect(
+      align === "right" ? x - tw - pad : x - pad,
+      y - 10,
+      tw + pad * 2,
+      14,
+      3
+    );
+    ctx.fill();
+
+    ctx.fillStyle = "rgba(255,255,255,0.45)";
+    ctx.fillText(text, x, y);
+  });
+
+  ctx.restore();
 }
 
+// ─── VEHICLE & SIGNAL UPDATES (unchanged) ─────────────────────────────────────
 function updateVehicles(vehicles, signals, fixedTiming) {
   signals.forEach((sig, i) => {
     sig.timer--;
@@ -207,7 +279,7 @@ function updateVehicles(vehicles, signals, fixedTiming) {
     }
   });
 
-  vehicles.forEach((v) => {
+  vehicles.forEach((v, idx) => {
     const blocked = signals.some((sig, i) => {
       if (sig.green) return false;
       const inter = INTERSECTIONS[i];
@@ -220,7 +292,26 @@ function updateVehicles(vehicles, signals, fixedTiming) {
       }
     });
 
-    if (blocked) {
+    // ── Car following logic - prevent vehicles from overlapping ──
+    const MIN_GAP = 0.06; // minimum gap between vehicles
+    const nearestAhead = vehicles
+      .filter((other, otherIdx) => {
+        if (otherIdx === idx) return false;
+        if (other.axis !== v.axis) return false;
+        if (v.axis === "h" && Math.abs(other.y - v.y) > 0.02) return false;
+        if (v.axis === "v" && Math.abs(other.x - v.x) > 0.02) return false;
+        const gap = v.dir > 0 ? other.pos - v.pos : v.pos - other.pos;
+        return gap > 0 && gap < MIN_GAP;
+      })
+      .sort((a, b) => {
+        const da = Math.abs(a.pos - v.pos);
+        const db = Math.abs(b.pos - v.pos);
+        return da - db;
+      })[0];
+
+    const tooClose = !!nearestAhead;
+
+    if (blocked || tooClose) {
       v.queued = true;
       v.queueTimer = fixedTiming
         ? 30 + Math.floor(Math.random() * 35)
@@ -240,15 +331,14 @@ function updateVehicles(vehicles, signals, fixedTiming) {
 
 function lerp(a, b, t) { return a + (b - a) * Math.min(1, t); }
 
+// ─── UI COMPONENTS ────────────────────────────────────────────────────────────
 function MetricCard({ label, value, sub, highlight }) {
   return (
     <div style={{
       textAlign: "center",
       padding: "10px 6px",
       borderRadius: 8,
-      background: highlight
-        ? "rgba(74,222,128,0.08)"
-        : "rgba(0,0,0,0.03)",
+      background: highlight ? "rgba(34,197,94,0.08)" : "rgba(0,0,0,0.03)",
     }}>
       <div style={{ fontSize: 10, color: "#888", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 2 }}>
         {label}
@@ -288,7 +378,10 @@ function SimPanel({ canvasRef, title, badge, badgeColor, metrics }) {
           {badge}
         </span>
       </div>
-      <canvas ref={canvasRef} style={{ display: "block", width: "100%", height: 280 }} />
+      {/* Canvas wrapper — dark bg to match the canvas background */}
+      <div style={{ background: "#0d1117", lineHeight: 0 }}>
+        <canvas ref={canvasRef} style={{ display: "block", width: "100%", height: 220 }} />
+      </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, padding: "8px 10px", borderTop: "1px solid #f0f0f0" }}>
         {metrics.map((m) => (
           <MetricCard key={m.label} {...m} />
@@ -325,6 +418,7 @@ function MiniChart({ data, color, baseline, label }) {
   );
 }
 
+// ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 export default function LiveSimulationPage() {
   const fixedCanvasRef = useRef(null);
   const aiCanvasRef = useRef(null);
@@ -340,23 +434,36 @@ export default function LiveSimulationPage() {
 
   const initSim = useCallback(() => {
     simRef.current = {
-      fixed: { vehicles: makeVehicles(26), signals: makeSignals() },
-      ai: { vehicles: makeVehicles(20), signals: makeSignals() },
+      fixed: { vehicles: makeVehicles(16), signals: makeSignals() },
+      ai: { vehicles: makeVehicles(14), signals: makeSignals() },
     };
   }, []);
 
+  // DPR-aware canvas resize
   const resizeCanvas = useCallback((ref) => {
     const el = ref.current;
     if (!el) return;
-    const w = el.parentElement?.clientWidth || 300;
-    el.width = w;
-    el.height = 280; // Taller canvas for better visibility
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = el.parentElement?.clientWidth || 300;
+    const cssH = 220;
+    el.width = Math.round(cssW * dpr);
+    el.height = Math.round(cssH * dpr);
+    el.style.width = cssW + "px";
+    el.style.height = cssH + "px";
   }, []);
 
   useEffect(() => {
     initSim();
     resizeCanvas(fixedCanvasRef);
     resizeCanvas(aiCanvasRef);
+
+    // Re-resize on window resize for mobile rotation etc.
+    const onResize = () => {
+      resizeCanvas(fixedCanvasRef);
+      resizeCanvas(aiCanvasRef);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, [initSim, resizeCanvas]);
 
   useEffect(() => {
@@ -366,13 +473,11 @@ export default function LiveSimulationPage() {
       if (!simRef.current) return;
       tickRef.current++;
 
-      const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
       updateVehicles(simRef.current.fixed.vehicles, simRef.current.fixed.signals, true);
       updateVehicles(simRef.current.ai.vehicles, simRef.current.ai.signals, false);
 
-      if (fixedCanvasRef.current) drawCanvas(fixedCanvasRef.current, simRef.current.fixed.vehicles, simRef.current.fixed.signals, isDark);
-      if (aiCanvasRef.current) drawCanvas(aiCanvasRef.current, simRef.current.ai.vehicles, simRef.current.ai.signals, isDark);
+      if (fixedCanvasRef.current) drawCanvas(fixedCanvasRef.current, simRef.current.fixed.vehicles, simRef.current.fixed.signals);
+      if (aiCanvasRef.current)    drawCanvas(aiCanvasRef.current,    simRef.current.ai.vehicles,    simRef.current.ai.signals);
 
       if (tickRef.current % 100 === 0) {
         setEpisode((ep) => {
@@ -380,7 +485,7 @@ export default function LiveSimulationPage() {
           const pct = next / 50;
           const aiDelay = +lerp(42.71, 27.45, pct).toFixed(2);
           const aiQueue = +lerp(10.92, 6.60, pct).toFixed(2);
-          const aiThr = Math.round(lerp(2545, 3120, pct));
+          const aiThr   = Math.round(lerp(2545, 3120, pct));
           setAiMetrics({ delay: aiDelay, queue: aiQueue, thr: aiThr });
 
           const fd = +(42.71 + (Math.random() * 1.4 - 0.7)).toFixed(2);
@@ -409,6 +514,7 @@ export default function LiveSimulationPage() {
     <div>
       <GlobalHeader />
       <div style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", maxWidth: 760, margin: "0 auto", padding: "16px 12px", color: "#111" }}>
+
         {/* Header */}
         <div style={{ marginBottom: 16 }}>
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
@@ -433,7 +539,13 @@ export default function LiveSimulationPage() {
                 {playing ? "⏸ Pause" : "▶ Play"}
               </button>
               <button
-                onClick={() => { initSim(); setEpisode(0); tickRef.current = 0; setAiMetrics({ delay: 42.71, queue: 10.92, thr: 2545 }); setFixedMetrics({ delay: 42.71, queue: 10.92, thr: 2545 }); }}
+                onClick={() => {
+                  initSim();
+                  setEpisode(0);
+                  tickRef.current = 0;
+                  setAiMetrics({ delay: 42.71, queue: 10.92, thr: 2545 });
+                  setFixedMetrics({ delay: 42.71, queue: 10.92, thr: 2545 });
+                }}
                 style={{
                   padding: "6px 14px", fontSize: 12, fontWeight: 600,
                   border: "1px solid #e0e0e0", borderRadius: 8, cursor: "pointer",
@@ -464,7 +576,7 @@ export default function LiveSimulationPage() {
           </div>
         </div>
 
-        {/* Simulation Tab */}
+        {/* ── SIMULATION TAB ── */}
         {tab === "simulation" && (
           <>
             {/* Episode Progress */}
@@ -478,11 +590,15 @@ export default function LiveSimulationPage() {
                 </span>
               </div>
               <div style={{ height: 5, background: "#e8e8e8", borderRadius: 99, overflow: "hidden" }}>
-                <div style={{ width: `${pct * 100}%`, height: "100%", background: "linear-gradient(90deg, #60a5fa, #4ade80)", borderRadius: 99, transition: "width 0.4s ease" }} />
+                <div style={{
+                  width: `${pct * 100}%`, height: "100%",
+                  background: "linear-gradient(90deg, #60a5fa, #4ade80)",
+                  borderRadius: 99, transition: "width 0.4s ease",
+                }} />
               </div>
             </div>
 
-            {/* Two panels */}
+            {/* Two sim panels */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
               <SimPanel
                 canvasRef={fixedCanvasRef}
@@ -490,8 +606,8 @@ export default function LiveSimulationPage() {
                 badge="BASELINE"
                 badgeColor={{ bg: "#fef2f2", text: "#dc2626" }}
                 metrics={[
-                  { label: "Avg delay", value: `${fixedMetrics.delay.toFixed(1)}s`, highlight: false },
-                  { label: "Queue", value: fixedMetrics.queue.toFixed(1), highlight: false },
+                  { label: "Avg delay",  value: `${fixedMetrics.delay.toFixed(1)}s`, highlight: false },
+                  { label: "Queue",      value: fixedMetrics.queue.toFixed(1),        highlight: false },
                   { label: "Throughput", value: `${fixedMetrics.thr}`, sub: "veh/hr", highlight: false },
                 ]}
               />
@@ -501,8 +617,8 @@ export default function LiveSimulationPage() {
                 badge="AI CONTROL"
                 badgeColor={{ bg: "#f0fdf4", text: "#16a34a" }}
                 metrics={[
-                  { label: "Avg delay", value: `${aiMetrics.delay.toFixed(1)}s`, highlight: true },
-                  { label: "Queue", value: aiMetrics.queue.toFixed(1), highlight: true },
+                  { label: "Avg delay",  value: `${aiMetrics.delay.toFixed(1)}s`, highlight: true },
+                  { label: "Queue",      value: aiMetrics.queue.toFixed(1),        highlight: true },
                   { label: "Throughput", value: `${aiMetrics.thr}`, sub: "veh/hr", highlight: true },
                 ]}
               />
@@ -513,8 +629,8 @@ export default function LiveSimulationPage() {
               {[
                 ["#60a5fa", "Moving vehicle"],
                 ["#f87171", "Queued / delayed"],
-                ["#4ade80", "Green signal"],
-                ["#f87171", "Red signal"]
+                ["#22c55e", "Green signal"],
+                ["#ef4444", "Red signal"],
               ].map(([c, l]) => (
                 <div key={l} style={{ display: "flex", alignItems: "center", gap: 5 }}>
                   <div style={{ width: 9, height: 9, borderRadius: "50%", background: c }} />
@@ -525,7 +641,7 @@ export default function LiveSimulationPage() {
           </>
         )}
 
-        {/* Training Tab */}
+        {/* ── TRAINING TAB ── */}
         {tab === "training" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div style={{ padding: "12px 14px", background: "#fafafa", border: "1px solid #efefef", borderRadius: 10 }}>
@@ -551,13 +667,13 @@ export default function LiveSimulationPage() {
           </div>
         )}
 
-        {/* Results Tab */}
+        {/* ── RESULTS TAB ── */}
         {tab === "results" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[
-              { label: "Delay reduction", baseline: "42.71s", dqn: "27.45s", improvement: "35.7%", color: "#60a5fa" },
-              { label: "Queue reduction", baseline: "10.92 veh", dqn: "6.60 veh", improvement: "39.6%", color: "#a78bfa" },
-              { label: "Throughput gain", baseline: "2,545/hr", dqn: "3,120/hr", improvement: "+22.6%", color: "#4ade80" },
+              { label: "Delay reduction",  baseline: "42.71s",    dqn: "27.45s",    improvement: "35.7%",  color: "#60a5fa" },
+              { label: "Queue reduction",  baseline: "10.92 veh", dqn: "6.60 veh",  improvement: "39.6%",  color: "#a78bfa" },
+              { label: "Throughput gain",  baseline: "2,545/hr",  dqn: "3,120/hr",  improvement: "+22.6%", color: "#4ade80" },
             ].map((r) => (
               <div key={r.label} style={{ padding: "12px 14px", background: "#fafafa", border: "1px solid #efefef", borderRadius: 10 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
@@ -576,7 +692,11 @@ export default function LiveSimulationPage() {
                   </div>
                 </div>
                 <div style={{ marginTop: 8, height: 4, background: "#e8e8e8", borderRadius: 99, overflow: "hidden" }}>
-                  <div style={{ height: "100%", width: r.color === "#4ade80" ? "22.6%" : r.color === "#60a5fa" ? "35.7%" : "39.6%", background: r.color, borderRadius: 99 }} />
+                  <div style={{
+                    height: "100%",
+                    width: r.color === "#4ade80" ? "22.6%" : r.color === "#60a5fa" ? "35.7%" : "39.6%",
+                    background: r.color, borderRadius: 99,
+                  }} />
                 </div>
               </div>
             ))}
@@ -585,6 +705,7 @@ export default function LiveSimulationPage() {
             </div>
           </div>
         )}
+
       </div>
     </div>
   );
