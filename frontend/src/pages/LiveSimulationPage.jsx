@@ -155,24 +155,18 @@ function drawCanvas(canvas, vehicles, signals, isDark) {
 
     // Vehicle shadow
     ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
-    ctx.beginPath();
-    ctx.roundRect(-8, -4, 16, 8, 2);
-    ctx.fill();
+    ctx.fillRect(-8, -4, 16, 8);
 
     // Vehicle body - BIGGER
     ctx.fillStyle = color;
     ctx.shadowColor = color;
     ctx.shadowBlur = v.queued ? 8 : 4;
-    ctx.beginPath();
-    ctx.roundRect(-9, -4.5, 18, 9, 2.5);
-    ctx.fill();
+    ctx.fillRect(-9, -4.5, 18, 9);
 
     // Vehicle highlight
     ctx.shadowBlur = 0;
     ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
-    ctx.beginPath();
-    ctx.roundRect(-7, -3, 10, 3, 1);
-    ctx.fill();
+    ctx.fillRect(-7, -3, 10, 3);
 
     ctx.restore();
   });
