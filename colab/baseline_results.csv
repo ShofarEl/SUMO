@@ -1,0 +1,11 @@
+Metric,Value
+Simulation Type,baseline_fixed_timing
+Total Steps,3600
+Simulation Duration (seconds),3600
+Total Departed Vehicles,2650
+Total Arrived Vehicles,2545
+Average Vehicles,10.92
+Average Speed (m/s),9.02
+Average Delay Per Vehicle (seconds),42.71
+Total Delay (seconds),108703.14
+Throughput Per Hour,2545.0

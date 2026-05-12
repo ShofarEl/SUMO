@@ -18,6 +18,7 @@ import LogsViewerPage from './pages/LogsViewerPage';
 import ElegantDashboard from './pages/ElegantDashboard';
 import ResultsDashboard from './pages/ResultsDashboard';
 import AboutPage from './pages/AboutPage';
+import TrainingResultsPage from './pages/TrainingResultsPage';
 function App() {
   return (
     <Router>
@@ -35,6 +36,9 @@ function App() {
           
           {/* Public About Page */}
           <Route path="/about" element={<AboutPage />} />
+          
+          {/* Public Training Results Page */}
+          <Route path="/training-results" element={<TrainingResultsPage />} />
           
           <Route
             path="/map"

@@ -103,6 +103,16 @@ export default function GlobalHeader() {
                 Results
               </Link>
               <Link 
+                to="/training-results" 
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                  isActive('/training-results') 
+                    ? 'bg-blue-700 text-white shadow-md' 
+                    : 'text-white/85 hover:bg-blue-700/50 hover:text-white'
+                }`}
+              >
+                Training
+              </Link>
+              <Link 
                 to="/simulations" 
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                   isActive('/simulations') 
@@ -163,6 +173,13 @@ export default function GlobalHeader() {
             className={isActive('/results') ? 'active' : ''}
           >
             Results
+          </Link>
+          <Link 
+            to="/training-results" 
+            onClick={() => setMenuOpen(false)}
+            className={isActive('/training-results') ? 'active' : ''}
+          >
+            Training
           </Link>
           <Link 
             to="/simulations" 

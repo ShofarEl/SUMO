@@ -1,0 +1,12 @@
+{
+  "simulation_type": "baseline_fixed_timing",
+  "total_steps": 3600,
+  "simulation_duration": 3600,
+  "total_departed": 2650,
+  "total_arrived": 2545,
+  "average_vehicles": 10.92,
+  "average_speed": 9.02,
+  "average_delay_per_vehicle": 42.71,
+  "total_delay": 108703.14,
+  "throughput_per_hour": 2545.0
+}
