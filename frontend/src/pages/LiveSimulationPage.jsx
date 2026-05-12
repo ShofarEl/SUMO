@@ -279,38 +279,54 @@ function updateVehicles(vehicles, signals, fixedTiming) {
     }
   });
 
+  // Update each vehicle with proper collision detection
   vehicles.forEach((v, idx) => {
+    // Check if blocked by red light
     const blocked = signals.some((sig, i) => {
       if (sig.green) return false;
       const inter = INTERSECTIONS[i];
       if (v.axis === "h") {
         const ahead = v.dir > 0 ? inter.x - v.pos : v.pos - inter.x;
-        return Math.abs(v.y - inter.y) < 0.07 && ahead > 0 && ahead < 0.1;
+        return Math.abs(v.y - inter.y) < 0.07 && ahead > 0 && ahead < 0.12;
       } else {
-        const ahead = inter.y - v.pos;
-        return Math.abs(v.x - inter.x) < 0.07 && ahead > 0 && ahead < 0.1;
+        const ahead = v.dir > 0 ? inter.y - v.pos : v.pos - inter.y;
+        return Math.abs(v.x - inter.x) < 0.07 && ahead > 0 && ahead < 0.12;
       }
     });
 
-    // ── Car following logic - prevent vehicles from overlapping ──
-    const MIN_GAP = 0.06; // minimum gap between vehicles
-    const nearestAhead = vehicles
-      .filter((other, otherIdx) => {
-        if (otherIdx === idx) return false;
-        if (other.axis !== v.axis) return false;
-        if (v.axis === "h" && Math.abs(other.y - v.y) > 0.02) return false;
-        if (v.axis === "v" && Math.abs(other.x - v.x) > 0.02) return false;
-        const gap = v.dir > 0 ? other.pos - v.pos : v.pos - other.pos;
-        return gap > 0 && gap < MIN_GAP;
-      })
-      .sort((a, b) => {
-        const da = Math.abs(a.pos - v.pos);
-        const db = Math.abs(b.pos - v.pos);
-        return da - db;
-      })[0];
+    // ── STRONG Car following logic - NO OVERLAP ALLOWED ──
+    const MIN_GAP = 0.055; // Minimum safe distance
+    let tooClose = false;
+    
+    // Check ALL vehicles for potential collision
+    for (let i = 0; i < vehicles.length; i++) {
+      if (i === idx) continue;
+      const other = vehicles[i];
+      
+      // Must be on same axis
+      if (other.axis !== v.axis) continue;
+      
+      // Must be on same lane (horizontal or vertical)
+      if (v.axis === "h") {
+        if (Math.abs(other.y - v.y) > 0.03) continue;
+        // Calculate distance ahead in direction of travel
+        const distAhead = v.dir > 0 ? other.pos - v.pos : v.pos - other.pos;
+        if (distAhead > 0 && distAhead < MIN_GAP) {
+          tooClose = true;
+          break;
+        }
+      } else {
+        if (Math.abs(other.x - v.x) > 0.03) continue;
+        // Calculate distance ahead in direction of travel
+        const distAhead = v.dir > 0 ? other.pos - v.pos : v.pos - other.pos;
+        if (distAhead > 0 && distAhead < MIN_GAP) {
+          tooClose = true;
+          break;
+        }
+      }
+    }
 
-    const tooClose = !!nearestAhead;
-
+    // Update vehicle state
     if (blocked || tooClose) {
       v.queued = true;
       v.queueTimer = fixedTiming
@@ -321,9 +337,11 @@ function updateVehicles(vehicles, signals, fixedTiming) {
       v.queued = true;
     } else {
       v.queued = false;
+      // Only move if not blocked and not too close
       v.pos += v.speed * (v.dir || 1);
     }
 
+    // Wrap around at edges
     if (v.pos > 1.05) v.pos = -0.05;
     if (v.pos < -0.05) v.pos = 1.05;
   });
@@ -434,8 +452,8 @@ export default function LiveSimulationPage() {
 
   const initSim = useCallback(() => {
     simRef.current = {
-      fixed: { vehicles: makeVehicles(16), signals: makeSignals() },
-      ai: { vehicles: makeVehicles(14), signals: makeSignals() },
+      fixed: { vehicles: makeVehicles(22), signals: makeSignals() },
+      ai: { vehicles: makeVehicles(20), signals: makeSignals() },
     };
   }, []);
 
