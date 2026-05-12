@@ -64,53 +64,77 @@ function drawCanvas(canvas, vehicles, signals, isDark) {
   const H = canvas.height;
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = isDark ? "#111" : "#f5f5f2";
+  
+  // Darker background for better contrast
+  ctx.fillStyle = isDark ? "#0a0a0a" : "#f0f0ed";
   ctx.fillRect(0, 0, W, H);
 
-  const roadFill = isDark ? "#252525" : "#e2e2de";
-  const roadEdge = isDark ? "#333" : "#cececa";
-  const dashColor = isDark ? "#3a3a3a" : "#c4c4be";
-  const labelColor = isDark ? "#555" : "#aaa";
+  const roadFill = isDark ? "#1a1a1a" : "#d8d8d4";
+  const roadEdge = isDark ? "#2a2a2a" : "#b8b8b4";
+  const dashColor = isDark ? "#404040" : "#ffffff";
+  const labelColor = isDark ? "#888" : "#666";
 
+  // Draw roads with better definition
   ROADS.forEach((r) => {
     const x1 = r.x1 * W, y1 = r.y1 * H, x2 = r.x2 * W, y2 = r.y2 * H;
     const isH = r.axis === "h";
-    const hw = isH ? H * 0.065 : W * 0.065;
+    const hw = isH ? H * 0.08 : W * 0.08; // Wider roads
 
+    // Road border
     ctx.strokeStyle = roadEdge;
-    ctx.lineWidth = hw + 3;
+    ctx.lineWidth = hw + 6;
     ctx.lineCap = "round";
     ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
 
+    // Road surface
     ctx.strokeStyle = roadFill;
     ctx.lineWidth = hw;
     ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
 
+    // Center line - more visible
     ctx.strokeStyle = dashColor;
-    ctx.setLineDash([6, 7]);
-    ctx.lineWidth = 0.8;
+    ctx.setLineDash([10, 10]);
+    ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
     ctx.setLineDash([]);
   });
 
+  // Draw intersections with animated traffic lights
   INTERSECTIONS.forEach((inter, idx) => {
     const sig = signals[idx];
     const ix = inter.x * W, iy = inter.y * H;
-    const hw = W * 0.065;
+    const hw = W * 0.08;
 
+    // Intersection box
     ctx.fillStyle = roadFill;
     ctx.fillRect(ix - hw / 2, iy - hw / 2, hw, hw);
 
-    const glow = sig.green ? "#4ade80" : "#f87171";
-    ctx.fillStyle = glow;
+    // Traffic light with dramatic glow
+    const glow = sig.green ? "#10b981" : "#ef4444";
+    const lightSize = 8;
+
+    // Outer glow
     ctx.shadowColor = glow;
-    ctx.shadowBlur = 6;
+    ctx.shadowBlur = 20;
+    ctx.fillStyle = glow;
+    ctx.globalAlpha = 0.3;
     ctx.beginPath();
-    ctx.arc(ix + hw * 0.38, iy - hw * 0.38, 3.5, 0, Math.PI * 2);
+    ctx.arc(ix + hw * 0.42, iy - hw * 0.42, lightSize + 4, 0, Math.PI * 2);
     ctx.fill();
+
+    // Inner light
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 12;
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(ix + hw * 0.42, iy - hw * 0.42, lightSize, 0, Math.PI * 2);
+    ctx.fill();
+
     ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
   });
 
+  // Draw vehicles - BIGGER and more dramatic
   vehicles.forEach((v) => {
     let vx, vy;
     if (v.axis === "h") {
@@ -121,23 +145,50 @@ function drawCanvas(canvas, vehicles, signals, isDark) {
       vy = v.pos * H;
     }
 
-    const color = v.queued ? "#f87171" : "#60a5fa";
+    // Dramatic colors
+    const color = v.queued ? "#ef4444" : "#10b981";
     const angle = v.axis === "h" ? (v.dir > 0 ? 0 : Math.PI) : Math.PI / 2;
 
     ctx.save();
     ctx.translate(vx, vy);
     ctx.rotate(angle);
-    ctx.fillStyle = color;
+
+    // Vehicle shadow
+    ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
     ctx.beginPath();
-    ctx.roundRect(-5, -2.5, 10, 5, 1.5);
+    ctx.roundRect(-8, -4, 16, 8, 2);
     ctx.fill();
+
+    // Vehicle body - BIGGER
+    ctx.fillStyle = color;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = v.queued ? 8 : 4;
+    ctx.beginPath();
+    ctx.roundRect(-9, -4.5, 18, 9, 2.5);
+    ctx.fill();
+
+    // Vehicle highlight
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+    ctx.beginPath();
+    ctx.roundRect(-7, -3, 10, 3, 1);
+    ctx.fill();
+
     ctx.restore();
   });
 
-  ctx.font = `${Math.max(9, W * 0.035)}px monospace`;
+  // Road labels - more prominent
+  ctx.shadowBlur = 0;
+  ctx.font = `bold ${Math.max(11, W * 0.04)}px sans-serif`;
   ctx.fillStyle = labelColor;
-  ctx.fillText("Sheriff St", W * 0.06, H * 0.35 - 8);
-  ctx.fillText("Camp St", W * 0.06, H * 0.65 - 8);
+  ctx.strokeStyle = isDark ? "#000" : "#fff";
+  ctx.lineWidth = 3;
+
+  ctx.strokeText("Sheriff St", W * 0.06, H * 0.35 - 12);
+  ctx.fillText("Sheriff St", W * 0.06, H * 0.35 - 12);
+
+  ctx.strokeText("Camp St", W * 0.06, H * 0.65 - 12);
+  ctx.fillText("Camp St", W * 0.06, H * 0.65 - 12);
 }
 
 function updateVehicles(vehicles, signals, fixedTiming) {
@@ -243,7 +294,7 @@ function SimPanel({ canvasRef, title, badge, badgeColor, metrics }) {
           {badge}
         </span>
       </div>
-      <canvas ref={canvasRef} style={{ display: "block", width: "100%", height: 200 }} />
+      <canvas ref={canvasRef} style={{ display: "block", width: "100%", height: 280 }} />
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, padding: "8px 10px", borderTop: "1px solid #f0f0f0" }}>
         {metrics.map((m) => (
           <MetricCard key={m.label} {...m} />
@@ -305,7 +356,7 @@ export default function LiveSimulationPage() {
     if (!el) return;
     const w = el.parentElement?.clientWidth || 300;
     el.width = w;
-    el.height = 200;
+    el.height = 280; // Taller canvas for better visibility
   }, []);
 
   useEffect(() => {
