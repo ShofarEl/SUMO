@@ -19,6 +19,7 @@ import ElegantDashboard from './pages/ElegantDashboard';
 import ResultsDashboard from './pages/ResultsDashboard';
 import AboutPage from './pages/AboutPage';
 import TrainingResultsPage from './pages/TrainingResultsPage';
+import LiveSimulationPage from './pages/LiveSimulationPage';
 function App() {
   return (
     <Router>
@@ -39,6 +40,9 @@ function App() {
           
           {/* Public Training Results Page */}
           <Route path="/training-results" element={<TrainingResultsPage />} />
+          
+          {/* Live Simulation Page */}
+          <Route path="/live-simulation" element={<LiveSimulationPage />} />
           
           <Route
             path="/map"
