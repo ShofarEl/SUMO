@@ -286,6 +286,13 @@ export default function ElegantDashboard() {
           </p>
 
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <a href="/georgetown_traffic_simulation.html" target="_blank" style={{
+              padding: '0.725rem 1.625rem', background: '#10b981', color: '#fff',
+              textDecoration: 'none', borderRadius: '0.375rem',
+              fontSize: '0.9rem', fontWeight: 600,
+            }}>
+              Watch Live Simulation
+            </a>
             <Link to="/results" style={{
               padding: '0.725rem 1.625rem', background: '#2563eb', color: '#fff',
               textDecoration: 'none', borderRadius: '0.375rem',
