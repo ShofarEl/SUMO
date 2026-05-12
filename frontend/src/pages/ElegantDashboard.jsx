@@ -214,6 +214,7 @@ export default function ElegantDashboard() {
               <a href="#home">Home</a>
               <a href="#research">Research</a>
               <Link to="/results" style={{ color: 'rgba(255,255,255,0.72)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>Results</Link>
+              <Link to="/training-results" style={{ color: 'rgba(255,255,255,0.72)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>Training</Link>
               <Link to="/about" style={{ color: 'rgba(255,255,255,0.72)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>About</Link>
             </div>
 
@@ -243,6 +244,7 @@ export default function ElegantDashboard() {
             <a href="#home" onClick={() => setMenuOpen(false)}>Home</a>
             <a href="#research" onClick={() => setMenuOpen(false)}>Research</a>
             <Link to="/results" onClick={() => setMenuOpen(false)} style={{ padding: '0.875rem 1.5rem', color: 'rgba(255,255,255,0.78)', textDecoration: 'none', fontSize: '0.9375rem', fontWeight: 500, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>Results</Link>
+            <Link to="/training-results" onClick={() => setMenuOpen(false)} style={{ padding: '0.875rem 1.5rem', color: 'rgba(255,255,255,0.78)', textDecoration: 'none', fontSize: '0.9375rem', fontWeight: 500, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>Training</Link>
             <Link to="/about" onClick={() => setMenuOpen(false)} style={{ padding: '0.875rem 1.5rem', color: 'rgba(255,255,255,0.78)', textDecoration: 'none', fontSize: '0.9375rem', fontWeight: 500, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>About</Link>
             <a href="/login" onClick={() => setMenuOpen(false)} style={{ borderBottom: 'none' }}>Sign In</a>
             <div className="eg-mobile-cta">
