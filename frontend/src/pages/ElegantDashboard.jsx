@@ -67,28 +67,48 @@ const GLOBAL_CSS = `
 
 /* HERO CONTENT */
 .eg-hero-content { position: relative; z-index: 5; flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 3.5rem 3.5rem; max-width: 740px; }
-.eg-hero-h1 { font-size: clamp(1.75rem, 4vw, 3rem); font-weight: 800; color: #fff; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 1.125rem; }
-.eg-hero-h1-size { font-size: 18px; }
+.eg-hero-h1 { font-size: clamp(2.1875rem, 5vw, 3.75rem); font-weight: 800; color: #fff; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 1.125rem; }
+.eg-hero-h1-size { font-size: 22.5px; }
 
 /* LAYOUT */
 .eg-section { padding: 5rem 0; }
 .eg-section-grey { padding: 5rem 0; background: #f9fafb; }
 .eg-container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
 .eg-section-hd { text-align: center; margin-bottom: 2.75rem; }
-.eg-section-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; color: #111827; margin-bottom: 0.5rem; }
-.eg-section-sub { font-size: 0.9375rem; color: #6b7280; }
+.eg-section-title { font-size: clamp(1.75rem, 3.75vw, 2.5rem); font-weight: 700; color: #111827; margin-bottom: 0.5rem; }
+.eg-section-sub { font-size: 1.171875rem; color: #6b7280; }
 
 /* CHARTS */
 .eg-charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 1.5rem; }
 .eg-chart-card { background: #fff; padding: 1.75rem; border-radius: 0.875rem; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
-.eg-chart-title { font-size: 0.9375rem; font-weight: 600; color: #111827; margin-bottom: 1.25rem; }
+.eg-chart-title { font-size: 1.171875rem; font-weight: 600; color: #111827; margin-bottom: 1.25rem; }
+
+/* MAP */
+.eg-map-container { 
+  height: 420px; 
+  max-height: 60vh;
+  border-radius: 0.875rem; 
+  overflow: hidden; 
+  box-shadow: 0 4px 18px rgba(0,0,0,0.09);
+  border: 2px solid #e5e7eb;
+}
+.eg-map-legend {
+  margin-top: 1rem;
+  padding: 1rem 1.5rem;
+  background: #f0f9ff;
+  border-left: 4px solid #2563eb;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  color: #1e40af;
+  line-height: 1.6;
+}
 
 /* METHODOLOGY */
 .eg-method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem 3rem; }
 .eg-method-item { text-align: center; }
 .eg-method-icon { width: 64px; height: 64px; border-radius: 14px; background: #eff6ff; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.125rem; }
-.eg-method-title { font-size: 1rem; font-weight: 600; color: #111827; margin-bottom: 0.5rem; }
-.eg-method-body { font-size: 0.875rem; color: #6b7280; line-height: 1.75; }
+.eg-method-title { font-size: 1.25rem; font-weight: 600; color: #111827; margin-bottom: 0.5rem; }
+.eg-method-body { font-size: 1.09375rem; color: #6b7280; line-height: 1.75; }
 
 /* CTA BUTTONS */
 .eg-cta-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
@@ -101,7 +121,7 @@ const GLOBAL_CSS = `
   .eg-hamburger { display: block; }
 
   .eg-hero-content { padding: 2rem 1.25rem; max-width: 100%; padding-top: 1rem; }
-  .eg-hero-h1 { font-size: 1.75rem; }
+  .eg-hero-h1 { font-size: 2.1875rem; }
 
   .eg-section { padding: 3.5rem 0; }
   .eg-section-grey { padding: 3.5rem 0; }
@@ -109,6 +129,15 @@ const GLOBAL_CSS = `
 
   .eg-method-grid { grid-template-columns: 1fr; gap: 2rem; }
   .eg-chart-card { padding: 1.125rem; }
+  
+  .eg-map-container { 
+    height: 300px;
+    border-radius: 0.5rem;
+  }
+  .eg-map-legend {
+    font-size: 0.875rem;
+    padding: 0.875rem 1rem;
+  }
 }
 
 /* MOBILE ≤ 480px */
@@ -118,6 +147,13 @@ const GLOBAL_CSS = `
   .eg-section-grey { padding: 2.75rem 0; }
   .eg-cta-row { flex-direction: column; align-items: center; }
   .eg-cta-row a { width: 100%; max-width: 280px; text-align: center; }
+  
+  .eg-map-container { 
+    height: 250px;
+  }
+  .eg-map-legend {
+    font-size: 0.8125rem;
+  }
 }
 `;
 
@@ -263,7 +299,7 @@ export default function ElegantDashboard() {
         {/* ── HERO TEXT ── */}
         <div className="eg-hero-content">
           <p style={{
-            fontSize: '0.72rem', fontWeight: 600,
+            fontSize: '0.9rem', fontWeight: 600,
             letterSpacing: '0.12em', textTransform: 'uppercase',
             color: 'rgba(255,255,255,0.45)', marginBottom: '0.875rem',
           }}>
@@ -274,14 +310,14 @@ export default function ElegantDashboard() {
             AI-Driven Traffic Signals<br />That Actually Work
           </h1>
 
-          <p style={{ fontSize: '0.9375rem', color: 'rgba(255,255,255,0.72)', lineHeight: 1.8, marginBottom: '0.625rem', maxWidth: '500px' }}>
+          <p style={{ fontSize: '1.171875rem', color: 'rgba(255,255,255,0.72)', lineHeight: 1.8, marginBottom: '0.625rem', maxWidth: '500px' }}>
             A Deep Q-Network agent trained on Georgetown's busiest corridor
             reduced average vehicle delay by{' '}
             <strong style={{ color: '#fff' }}>{delayReduction}%</strong> — from 42.7 s to 27.5 s
             — across 50 simulated episodes on a T4 GPU.
           </p>
 
-          <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.35)', marginBottom: '2rem' }}>
+          <p style={{ fontSize: '0.975rem', color: 'rgba(255,255,255,0.35)', marginBottom: '2rem' }}>
             Master's thesis research · 7 roads modelled · SUMO simulator
           </p>
 
@@ -289,21 +325,21 @@ export default function ElegantDashboard() {
             <Link to="/live-simulation" style={{
               padding: '0.725rem 1.625rem', background: '#10b981', color: '#fff',
               textDecoration: 'none', borderRadius: '0.375rem',
-              fontSize: '0.9rem', fontWeight: 600,
+              fontSize: '1.125rem', fontWeight: 600,
             }}>
               Watch Live Simulation
             </Link>
             <Link to="/results" style={{
               padding: '0.725rem 1.625rem', background: '#2563eb', color: '#fff',
               textDecoration: 'none', borderRadius: '0.375rem',
-              fontSize: '0.9rem', fontWeight: 600,
+              fontSize: '1.125rem', fontWeight: 600,
             }}>
               View Full Results
             </Link>
             <a href="#research" style={{
               padding: '0.725rem 1.625rem', background: 'transparent', color: '#fff',
               textDecoration: 'none', borderRadius: '0.375rem',
-              fontSize: '0.9rem', fontWeight: 600,
+              fontSize: '1.125rem', fontWeight: 600,
               border: '1.5px solid rgba(255,255,255,0.32)',
             }}>
               Learn More
@@ -398,13 +434,16 @@ export default function ElegantDashboard() {
               <h2 className="eg-section-title">Georgetown Network</h2>
               <p className="eg-section-sub">Sheriff Street / Vlissengen Road corridor — 7 major roads</p>
             </div>
-            <div style={{ height: '420px', borderRadius: '0.875rem', overflow: 'hidden', boxShadow: '0 4px 18px rgba(0,0,0,0.09)' }}>
+            <div className="eg-map-container">
               <MapContainer center={[6.8015, -58.155]} zoom={14} style={{ height: '100%', width: '100%' }}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; OpenStreetMap contributors' />
                 {mapData.geojson && (
                   <GeoJSON data={mapData.geojson} style={() => ({ color: '#2563eb', weight: 4, opacity: 0.8 })} />
                 )}
               </MapContainer>
+            </div>
+            <div className="eg-map-legend">
+              <p><strong>What you're seeing:</strong> The colored lines represent Georgetown's road network. Each line is a road segment from OpenStreetMap data showing the actual street layout of the Sheriff Street corridor.</p>
             </div>
           </div>
         </section>

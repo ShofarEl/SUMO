@@ -64,7 +64,7 @@ body{background:#07090f;color:#e2e8f0;font-family:'DM Sans',sans-serif;-webkit-t
 
 /* Touch-friendly buttons */
 .btn-ctrl{
-  font-family:'Space Mono',monospace;font-size:10px;padding:8px 16px;
+  font-family:'Space Mono',monospace;font-size:12.5px;padding:8px 16px;
   border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,0.1);
   background:transparent;color:#e2e8f0;min-height:36px;
 }
@@ -95,8 +95,8 @@ body{background:#07090f;color:#e2e8f0;font-family:'DM Sans',sans-serif;-webkit-t
     content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
     width:20px;height:2px;background:#3b82f6;border-radius:0 0 2px 2px;
   }
-  .bnav-icon{font-size:15px;line-height:1;}
-  .bnav-label{font-family:'Space Mono',monospace;font-size:6.5px;letter-spacing:.04em;text-transform:uppercase;}
+  .bnav-icon{font-size:18.75px;line-height:1;}
+  .bnav-label{font-family:'Space Mono',monospace;font-size:8.125px;letter-spacing:.04em;text-transform:uppercase;}
 
   /* Hide top nav */
   .top-nav{display:none !important;}
@@ -130,7 +130,7 @@ body{background:#07090f;color:#e2e8f0;font-family:'DM Sans',sans-serif;-webkit-t
   .hide-mobile{display:none !important;}
 
   /* Hero number */
-  .hero-num{font-size:28px !important;}
+  .hero-num{font-size:35px !important;}
 }
 `;
 
@@ -241,7 +241,7 @@ function Card({children,style,accent}){
 }
 function Label({children,color}){
   return(
-    <div style={{...mono,fontSize:9,letterSpacing:".09em",textTransform:"uppercase",
+    <div style={{...mono,fontSize:11.25,letterSpacing:".09em",textTransform:"uppercase",
       color:color||C.muted,marginBottom:10}}>
       {children}
     </div>
@@ -249,7 +249,7 @@ function Label({children,color}){
 }
 function Tag({children,color}){
   return(
-    <span style={{...mono,fontSize:8,padding:"2px 7px",borderRadius:99,
+    <span style={{...mono,fontSize:10,padding:"2px 7px",borderRadius:99,
       background:color+"18",color,border:`1px solid ${color}35`,fontWeight:700,letterSpacing:".04em"}}>
       {children}
     </span>
@@ -259,7 +259,7 @@ function StatusBadge({text,type}){
   const cols={ready:C.green,partial:C.amber,needed:C.red};
   const col=cols[type]||C.muted;
   return(
-    <span style={{...mono,fontSize:8,padding:"2px 7px",borderRadius:99,
+    <span style={{...mono,fontSize:10,padding:"2px 7px",borderRadius:99,
       background:`${col}14`,color:col,letterSpacing:".03em"}}>
       {text}
     </span>
@@ -292,12 +292,12 @@ function DQNProgressChart({highlightEp}){
             stroke={v===42.71?"rgba(239,68,68,.3)":"rgba(255,255,255,.04)"}
             strokeWidth={v===42.71?1.5:1} strokeDasharray={v===42.71?"6,4":""}/>
           <text x={pad.l-5} y={yp(v)+3} fill={v===42.71?C.red:C.muted}
-            fontSize="9" fontFamily="Space Mono" textAnchor="end">
+            fontSize="11.25" fontFamily="Space Mono" textAnchor="end">
             {v===42.71?"42.7":v}s
           </text>
         </g>
       ))}
-      <text x={W-pad.r-2} y={baseY-5} fill={C.red} fontSize="8" fontFamily="Space Mono" textAnchor="end">Baseline</text>
+      <text x={W-pad.r-2} y={baseY-5} fill={C.red} fontSize="10" fontFamily="Space Mono" textAnchor="end">Baseline</text>
       {fill&&<path d={fill} fill="url(#dg2)"/>}
       {visible.length>1&&<path d={path} stroke={C.blue} strokeWidth="2" fill="none" strokeLinecap="round"/>}
       {CHECKPOINTS.filter(cp=>cp<=(highlightEp||50)).map(cp=>{
@@ -310,7 +310,7 @@ function DQNProgressChart({highlightEp}){
               stroke={isLast?"rgba(16,185,129,.35)":"none"} strokeWidth={isLast?7:0}/>
             {(cp===10||cp===30||cp===50)&&(
               <text x={xp(cp-1)} y={yp(d)-9} fill={cp===50?C.green:C.muted}
-                fontSize="8" fontFamily="Space Mono" textAnchor="middle">
+                fontSize="10" fontFamily="Space Mono" textAnchor="middle">
                 {cp===50?`${d}s`:`EP${cp}`}
               </text>
             )}
@@ -338,9 +338,9 @@ function RMSEChart(){
             height:`${(it.val/max)*105}px`,
             background:`linear-gradient(180deg,${it.color},${it.color}77)`,
             display:"flex",alignItems:"flex-start",justifyContent:"center",paddingTop:5}}>
-            <span style={{...mono,fontSize:9,fontWeight:700,color:"#fff"}}>{it.val}</span>
+            <span style={{...mono,fontSize:11.25,fontWeight:700,color:"#fff"}}>{it.val}</span>
           </div>
-          <div style={{...mono,fontSize:8,color:C.muted,textAlign:"center",lineHeight:1.35,whiteSpace:"pre-line"}}>{it.label}</div>
+          <div style={{...mono,fontSize:10,color:C.muted,textAlign:"center",lineHeight:1.35,whiteSpace:"pre-line"}}>{it.label}</div>
         </div>
       ))}
     </div>
@@ -360,13 +360,13 @@ function LSTMLineChart(){
       {[20,40,60,80].map(v=>(
         <g key={v}>
           <line x1={pad.l} y1={yp(v)} x2={W-pad.r} y2={yp(v)} stroke="rgba(255,255,255,.04)"/>
-          <text x={pad.l-3} y={yp(v)+3} fill={C.muted} fontSize="7" fontFamily="Space Mono" textAnchor="end">{v}</text>
+          <text x={pad.l-3} y={yp(v)+3} fill={C.muted} fontSize="8.75" fontFamily="Space Mono" textAnchor="end">{v}</text>
         </g>
       ))}
       <line x1={pad.l} y1={iH+pad.t} x2={W-pad.r} y2={iH+pad.t} stroke={C.border}/>
       <path d={aPath} stroke="#60a5fa" strokeWidth="1.5" fill="none"/>
       <path d={pPath} stroke="#f87171" strokeWidth="1.5" fill="none" strokeDasharray="4,3"/>
-      <text x={xp(30)} y={yp(82)-7} fill={C.muted} fontSize="7" fontFamily="Space Mono" textAnchor="middle">incident spike</text>
+      <text x={xp(30)} y={yp(82)-7} fill={C.muted} fontSize="8.75" fontFamily="Space Mono" textAnchor="middle">incident spike</text>
       <line x1={xp(30)} y1={yp(82)-2} x2={xp(30)} y2={yp(70)} stroke={C.muted} strokeWidth=".7"/>
     </svg>
   );
@@ -405,7 +405,7 @@ function MapCanvas(){
       ctx.fillStyle="rgba(255,255,255,.12)";ctx.fill();
       ctx.strokeStyle="rgba(255,255,255,.25)";ctx.lineWidth=1;ctx.stroke();
     });
-    ctx.font=`bold 10px 'Space Mono',monospace`;
+    ctx.font=`bold 12.5px 'Space Mono',monospace`;
     [{t:"Sheriff Street",x:.05,y:.35,col:"#ef4444",dy:-13},{t:"Vlissengen Rd",x:.56,y:.1,col:"#ef4444",dy:0},
      {t:"Camp Street",x:.05,y:.67,col:"#f59e0b",dy:0},{t:"Church St",x:.26,y:.1,col:"#f59e0b",dy:0},
      {t:"Regent St",x:.05,y:.57,col:"#f59e0b",dy:0}].forEach(({t,x,y,col,dy=0})=>{
@@ -414,7 +414,7 @@ function MapCanvas(){
       ctx.fillStyle=col;ctx.fillText(t,x*W+1,y*H+dy);
     });
     ctx.fillStyle="rgba(7,9,15,.8)";ctx.fillRect(0,0,W,20);
-    ctx.fillStyle="rgba(255,255,255,.4)";ctx.font="9px 'Space Mono',monospace";
+    ctx.fillStyle="rgba(255,255,255,.4)";ctx.font="11.25px 'Space Mono',monospace";
     ctx.fillText("Georgetown, Guyana · OSM · 2,646 Junctions · 6,771 Segments",8,13);
   },[]);
   useEffect(()=>{
@@ -433,8 +433,8 @@ function SimPanel({title,badge,badgeColor,canvasRef,stats,statColor}){
     <div style={{border:`1px solid ${C.border}`,borderRadius:12,overflow:"hidden"}}>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",
         padding:"7px 12px",background:C.surface2,borderBottom:`1px solid ${C.border}`}}>
-        <span style={{...mono,fontSize:10,letterSpacing:".05em"}}>{title}</span>
-        <span style={{...mono,fontSize:8,padding:"2px 7px",borderRadius:99,fontWeight:700,background:bc.bg,color:bc.col}}>{badge}</span>
+        <span style={{...mono,fontSize:12.5,letterSpacing:".05em"}}>{title}</span>
+        <span style={{...mono,fontSize:10,padding:"2px 7px",borderRadius:99,fontWeight:700,background:bc.bg,color:bc.col}}>{badge}</span>
       </div>
       <div style={{background:"#0d1117",lineHeight:0}}>
         <canvas ref={canvasRef} style={{display:"block",width:"100%",height:180}}/>
@@ -442,8 +442,8 @@ function SimPanel({title,badge,badgeColor,canvasRef,stats,statColor}){
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:3,padding:6}}>
         {[["Delay",stats.delay],["Queue",stats.queue],["Thr/hr",stats.thr]].map(([l,v])=>(
           <div key={l} style={{textAlign:"center",padding:"6px 4px",borderRadius:7,background:"rgba(255,255,255,.025)"}}>
-            <div style={{...mono,fontSize:7,color:C.muted,textTransform:"uppercase",letterSpacing:".06em"}}>{l}</div>
-            <div style={{...mono,fontSize:13,fontWeight:700,color:statColor,marginTop:1}}>{v}</div>
+            <div style={{...mono,fontSize:8.75,color:C.muted,textTransform:"uppercase",letterSpacing:".06em"}}>{l}</div>
+            <div style={{...mono,fontSize:16.25,fontWeight:700,color:statColor,marginTop:1}}>{v}</div>
           </div>
         ))}
       </div>
@@ -519,10 +519,10 @@ function SimulationTab(){
     <div className="fade-up">
       <Card style={{marginBottom:10,padding:"12px 14px"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-          <div style={{...mono,fontSize:10,color:C.muted}}>
+          <div style={{...mono,fontSize:12.5,color:C.muted}}>
             Episode <strong style={{color:C.text}}>{episode}</strong><span style={{color:C.dim}}> / 50</span>
           </div>
-          <div style={{...mono,fontSize:11,fontWeight:700,color:episode>0?C.green:C.dim}}>{improvement}</div>
+          <div style={{...mono,fontSize:13.75,fontWeight:700,color:episode>0?C.green:C.dim}}>{improvement}</div>
         </div>
         <div style={{height:4,background:"rgba(255,255,255,.05)",borderRadius:99,overflow:"hidden",marginBottom:6}}>
           <div style={{height:"100%",width:`${(episode/50)*100}%`,
@@ -530,7 +530,7 @@ function SimulationTab(){
         </div>
         <div style={{display:"flex",justifyContent:"space-between"}}>
           {CHECKPOINTS.map(cp=>(
-            <span key={cp} style={{...mono,fontSize:7,color:episode>=cp?C.green:C.dim}}>{cp}</span>
+            <span key={cp} style={{...mono,fontSize:8.75,color:episode>=cp?C.green:C.dim}}>{cp}</span>
           ))}
         </div>
       </Card>
@@ -552,7 +552,7 @@ function SimulationTab(){
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8,flexWrap:"wrap",gap:6}}>
         <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
           {[["#60a5fa","Moving"],["#f87171","Queued"],["#22c55e","Green"],["#ef4444","Red"]].map(([c,l])=>(
-            <div key={l} style={{display:"flex",alignItems:"center",gap:4,fontSize:10,color:C.muted}}>
+            <div key={l} style={{display:"flex",alignItems:"center",gap:4,fontSize:12.5,color:C.muted}}>
               <div style={{width:7,height:7,borderRadius:"50%",background:c}}/>{l}
             </div>
           ))}
@@ -582,8 +582,8 @@ function OverviewTab(){
           <span style={{...mono,fontSize:9,color:C.green,letterSpacing:".07em",textTransform:"uppercase"}}>Main Finding — DQN Signal Control</span>
         </div>
         <div className="hero-num" style={{...mono,fontSize:36,fontWeight:700,color:C.green,lineHeight:1,marginBottom:6}}>35.7%</div>
-        <div style={{fontSize:13,fontWeight:600,marginBottom:4}}>Delay reduced: 42.71s → 27.45s</div>
-        <div style={{fontSize:11,color:C.muted,lineHeight:1.7}}>
+        <div style={{fontSize:16.25,fontWeight:600,marginBottom:4}}>Delay reduced: 42.71s → 27.45s</div>
+        <div style={{fontSize:13.75,color:C.muted,lineHeight:1.7}}>
           DQN RL agent · 50 episodes · Georgetown OSM network.<br/>
           Exceeds literature benchmark of 25–34%. Queue also ↓ 39.6%.
         </div>
@@ -597,16 +597,16 @@ function OverviewTab(){
           ["2,646",C.blue,"Junctions","Real OSM"],
         ].map(([v,col,l,sub])=>(
           <Card key={l} style={{textAlign:"center",padding:"12px 6px"}}>
-            <div style={{...mono,fontSize:7,color:C.muted,textTransform:"uppercase",letterSpacing:".07em",marginBottom:4}}>{l}</div>
-            <div style={{...mono,fontSize:16,fontWeight:700,color:col,lineHeight:1}}>{v}</div>
-            <div style={{fontSize:10,color:C.dim,marginTop:3}}>{sub}</div>
+            <div style={{...mono,fontSize:8.75,color:C.muted,textTransform:"uppercase",letterSpacing:".07em",marginBottom:4}}>{l}</div>
+            <div style={{...mono,fontSize:20,fontWeight:700,color:col,lineHeight:1}}>{v}</div>
+            <div style={{fontSize:12.5,color:C.dim,marginTop:3}}>{sub}</div>
           </Card>
         ))}
       </div>
 
       <Card style={{marginBottom:10}}>
         <Label>Study Overview</Label>
-        <p style={{fontSize:12,color:C.muted,lineHeight:1.8}}>
+        <p style={{fontSize:15,color:C.muted,lineHeight:1.8}}>
           Simulation-based feasibility study evaluating AI for traffic management in{" "}
           <strong style={{color:C.text}}>Georgetown, Guyana</strong> — Sheriff Street / Vlissengen Road corridor.
           Real OpenStreetMap road network data. Not a live deployment; results use synthetic data
@@ -624,12 +624,12 @@ function OverviewTab(){
           <div key={rq} style={{display:"flex",alignItems:"center",gap:10,
             padding:"10px 0",borderBottom:i<arr.length-1?`1px solid ${C.border}`:"none"}}>
             <div style={{width:32,height:32,borderRadius:8,background:"rgba(59,130,246,.12)",
-              display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>
+              display:"flex",alignItems:"center",justifyContent:"center",fontSize:18.75,flexShrink:0}}>
               {icon}
             </div>
             <div style={{flex:1,minWidth:0}}>
-              <div style={{fontSize:12,fontWeight:600,marginBottom:3}}>
-                <span style={{...mono,fontSize:9,color:C.blue,marginRight:5}}>{rq}</span>{title}
+              <div style={{fontSize:15,fontWeight:600,marginBottom:3}}>
+                <span style={{...mono,fontSize:11.25,color:C.blue,marginRight:5}}>{rq}</span>{title}
               </div>
               <StatusBadge text={status} type={type}/>
             </div>
@@ -647,10 +647,10 @@ function OverviewTab(){
         ].map(({icon,title,sub,status,type},i,arr)=>(
           <div key={title} style={{display:"flex",alignItems:"center",gap:10,
             padding:"9px 0",borderBottom:i<arr.length-1?`1px solid ${C.border}`:"none"}}>
-            <span style={{fontSize:16,flexShrink:0}}>{icon}</span>
+            <span style={{fontSize:20,flexShrink:0}}>{icon}</span>
             <div style={{flex:1,minWidth:0}}>
-              <div style={{fontSize:12,fontWeight:600}}>{title}</div>
-              <div style={{fontSize:10,color:C.muted,marginTop:1}}>{sub}</div>
+              <div style={{fontSize:15,fontWeight:600}}>{title}</div>
+              <div style={{fontSize:12.5,color:C.muted,marginTop:1}}>{sub}</div>
             </div>
             <StatusBadge text={status} type={type}/>
           </div>
@@ -666,10 +666,10 @@ function PredictionTab(){
     <div className="fade-up">
       <div style={{background:`${C.amber}0e`,border:`1px solid ${C.amber}28`,
         borderRadius:14,padding:14,marginBottom:10,display:"flex",gap:10,alignItems:"flex-start"}}>
-        <span style={{fontSize:20,flexShrink:0}}>🏆</span>
+        <span style={{fontSize:25,flexShrink:0}}>🏆</span>
         <div>
-          <div style={{fontSize:13,fontWeight:700,color:C.amber,marginBottom:2}}>Random Forest — Best Model</div>
-          <div style={{fontSize:11,color:C.text,lineHeight:1.7}}>
+          <div style={{fontSize:16.25,fontWeight:700,color:C.amber,marginBottom:2}}>Random Forest — Best Model</div>
+          <div style={{fontSize:13.75,color:C.text,lineHeight:1.7}}>
             <strong>RMSE 3.826s</strong> vs LSTM (5.955s) and ARIMA (5.967s).
             Ensemble methods beat deep learning in data-sparse settings like Georgetown.
           </div>
@@ -696,12 +696,12 @@ function PredictionTab(){
               ].map((r,i)=>(
                 <tr key={r.name} style={{borderBottom:i<2?`1px solid ${C.border}`:"none",
                   background:r.winner?"rgba(245,158,11,.04)":"transparent"}}>
-                  <td style={{padding:"9px 8px",fontSize:12,fontWeight:600,color:r.nc}}>
+                  <td style={{padding:"9px 8px",fontSize:15,fontWeight:600,color:r.nc}}>
                     {r.name}{r.winner&&<span style={{marginLeft:5}}><Tag color={C.amber}>BEST</Tag></span>}
                   </td>
-                  <td style={{...mono,padding:"9px 8px",fontSize:12,color:r.nc}}>{r.rmse}</td>
-                  <td style={{...mono,padding:"9px 8px",fontSize:12,color:r.nc}}>{r.mae}</td>
-                  <td style={{fontSize:10,color:r.winner?C.green:C.muted,padding:"9px 8px"}}>{r.verdict}</td>
+                  <td style={{...mono,padding:"9px 8px",fontSize:15,color:r.nc}}>{r.rmse}</td>
+                  <td style={{...mono,padding:"9px 8px",fontSize:15,color:r.nc}}>{r.mae}</td>
+                  <td style={{fontSize:12.5,color:r.winner?C.green:C.muted,padding:"9px 8px"}}>{r.verdict}</td>
                 </tr>
               ))}
             </tbody>
@@ -726,7 +726,7 @@ function PredictionTab(){
             ))}
           </div>
           <div style={{marginTop:8,padding:"8px 10px",background:"rgba(239,68,68,.06)",
-            borderRadius:8,border:`1px solid ${C.red}22`,fontSize:10,color:C.muted,lineHeight:1.6}}>
+            borderRadius:8,border:`1px solid ${C.red}22`,fontSize:12.5,color:C.muted,lineHeight:1.6}}>
             LSTM misses incident spikes → Random Forest more robust with limited data.
           </div>
         </Card>
@@ -753,8 +753,8 @@ function RLTab(){
         <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
           <span style={{fontSize:20}}>🤖</span>
           <div>
-            <div style={{...mono,fontSize:9,color:C.green,letterSpacing:".07em",textTransform:"uppercase",marginBottom:2}}>Main Contribution — RQ2</div>
-            <div style={{fontSize:14,fontWeight:700}}>DQN Adaptive Signal Control</div>
+            <div style={{...mono,fontSize:11.25,color:C.green,letterSpacing:".07em",textTransform:"uppercase",marginBottom:2}}>Main Contribution — RQ2</div>
+            <div style={{fontSize:17.5,fontWeight:700}}>DQN Adaptive Signal Control</div>
           </div>
         </div>
         <div className="grid-3">
@@ -762,9 +762,9 @@ function RLTab(){
             <div key={l} style={{padding:10,borderRadius:10,textAlign:"center",
               background:hi?`${col}10`:"rgba(255,255,255,.025)",
               border:`1px solid ${hi?col+"28":C.border}`}}>
-              <div style={{...mono,fontSize:8,color:C.muted,textTransform:"uppercase",letterSpacing:".06em",marginBottom:3}}>{l}</div>
-              <div style={{...mono,fontSize:18,fontWeight:700,color:col}}>{v}</div>
-              {hi&&<div style={{fontSize:9,color:C.green,marginTop:2}}>Exceeds ✓</div>}
+              <div style={{...mono,fontSize:10,color:C.muted,textTransform:"uppercase",letterSpacing:".06em",marginBottom:3}}>{l}</div>
+              <div style={{...mono,fontSize:22.5,fontWeight:700,color:col}}>{v}</div>
+              {hi&&<div style={{fontSize:11.25,color:C.green,marginTop:2}}>Exceeds ✓</div>}
             </div>
           ))}
         </div>
@@ -777,20 +777,20 @@ function RLTab(){
         ].map(({title,fixed,ai,pct})=>(
           <Card key={title}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-              <div style={{fontSize:11,fontWeight:600}}>{title}</div>
-              <div style={{...mono,fontSize:14,fontWeight:700,color:C.green}}>↓ {pct}</div>
+              <div style={{fontSize:13.75,fontWeight:600}}>{title}</div>
+              <div style={{...mono,fontSize:17.5,fontWeight:700,color:C.green}}>↓ {pct}</div>
             </div>
             <div style={{display:"flex",gap:8,alignItems:"center"}}>
               <div style={{flex:1}}>
-                <div style={{...mono,fontSize:8,color:C.muted,marginBottom:4}}>Fixed</div>
+                <div style={{...mono,fontSize:10,color:C.muted,marginBottom:4}}>Fixed</div>
                 <div style={{padding:"7px 10px",borderRadius:7,background:`${C.red}12`,
-                  border:`1px solid ${C.red}28`,...mono,fontSize:11,fontWeight:700,color:C.red}}>{fixed}</div>
+                  border:`1px solid ${C.red}28`,...mono,fontSize:13.75,fontWeight:700,color:C.red}}>{fixed}</div>
               </div>
-              <div style={{fontSize:16,color:C.dim,flexShrink:0}}>→</div>
+              <div style={{fontSize:20,color:C.dim,flexShrink:0}}>→</div>
               <div style={{flex:1}}>
-                <div style={{...mono,fontSize:8,color:C.muted,marginBottom:4}}>DQN AI</div>
+                <div style={{...mono,fontSize:10,color:C.muted,marginBottom:4}}>DQN AI</div>
                 <div style={{padding:"7px 10px",borderRadius:7,background:`${C.green}12`,
-                  border:`1px solid ${C.green}28`,...mono,fontSize:11,fontWeight:700,color:C.green}}>{ai}</div>
+                  border:`1px solid ${C.green}28`,...mono,fontSize:13.75,fontWeight:700,color:C.green}}>{ai}</div>
               </div>
             </div>
             <div style={{marginTop:8,height:3,background:"rgba(255,255,255,.05)",borderRadius:99}}>
@@ -823,9 +823,9 @@ function RLTab(){
             return(
               <div key={cp} style={{textAlign:"center",padding:"8px 4px",borderRadius:9,
                 background:"rgba(255,255,255,.025)",border:`1px solid ${C.border}`}}>
-                <div style={{...mono,fontSize:8,color:C.blue,marginBottom:3}}>EP{cp}</div>
-                <div style={{...mono,fontSize:12,fontWeight:700,color:C.text}}>{t.delay}s</div>
-                <div style={{fontSize:9,color:C.green}}>↓{imp}%</div>
+                <div style={{...mono,fontSize:10,color:C.blue,marginBottom:3}}>EP{cp}</div>
+                <div style={{...mono,fontSize:15,fontWeight:700,color:C.text}}>{t.delay}s</div>
+                <div style={{fontSize:11.25,color:C.green}}>↓{imp}%</div>
               </div>
             );
           })}
@@ -924,10 +924,10 @@ function FeasibilityTab(){
           ].map(({phase,period,col,steps},i)=>(
             <div key={phase} className="roadmap-cell" style={{padding:"12px",
               borderRight:i<3?`1px solid ${C.border}`:"none"}}>
-              <div style={{...mono,fontSize:8,color:col,marginBottom:3,letterSpacing:".06em"}}>{phase}</div>
-              <div style={{fontSize:11,fontWeight:600,marginBottom:8}}>{period}</div>
+              <div style={{...mono,fontSize:10,color:col,marginBottom:3,letterSpacing:".06em"}}>{phase}</div>
+              <div style={{fontSize:13.75,fontWeight:600,marginBottom:8}}>{period}</div>
               {steps.map(s=>(
-                <div key={s} style={{display:"flex",gap:5,fontSize:10,color:C.muted,lineHeight:1.5,marginBottom:4}}>
+                <div key={s} style={{display:"flex",gap:5,fontSize:12.5,color:C.muted,lineHeight:1.5,marginBottom:4}}>
                   <span style={{color:col,flexShrink:0}}>→</span>{s}
                 </div>
               ))}
@@ -938,10 +938,10 @@ function FeasibilityTab(){
 
       <Card accent={C.amber}>
         <div style={{display:"flex",gap:8,alignItems:"flex-start"}}>
-          <span style={{fontSize:15,flexShrink:0}}>⚠️</span>
+          <span style={{fontSize:18.75,flexShrink:0}}>⚠️</span>
           <div>
-            <div style={{fontSize:11,fontWeight:700,color:C.amber,marginBottom:4}}>Study Limitations — Honest Academic Scope</div>
-            <div style={{fontSize:11,color:C.muted,lineHeight:1.8}}>
+            <div style={{fontSize:13.75,fontWeight:700,color:C.amber,marginBottom:4}}>Study Limitations — Honest Academic Scope</div>
+            <div style={{fontSize:13.75,color:C.muted,lineHeight:1.8}}>
               This is a <strong style={{color:C.text}}>simulation-based feasibility study</strong>, not a live deployment.
               Synthetic traffic data calibrated to Georgetown's known conditions on a real OSM network.
               Real-world validation with actual sensor data required before operational deployment.
@@ -991,7 +991,7 @@ export default function GeorgetownDashboard(){
       }}>
         <div style={{display:"flex",alignItems:"center",gap:8}}>
           <div style={{width:7,height:7,borderRadius:"50%",background:C.green,animation:"pulse 2s infinite"}}/>
-          <span style={{...mono,fontSize:12,letterSpacing:".07em"}}>Georgetown Traffic AI</span>
+          <span style={{...mono,fontSize:15,letterSpacing:".07em"}}>Georgetown Traffic AI</span>
         </div>
         <div style={{display:"flex",gap:6,alignItems:"center"}}>
           <Tag color={C.green}>35.7% ↓</Tag>
@@ -1007,7 +1007,7 @@ export default function GeorgetownDashboard(){
         <style>{`.top-nav::-webkit-scrollbar{display:none}`}</style>
         {TAB_CONFIG.map(t=>(
           <button key={t.id} onClick={()=>setTab(t.id)} style={{
-            ...mono,fontSize:10,letterSpacing:".06em",padding:"12px 16px",
+            ...mono,fontSize:12.5,letterSpacing:".06em",padding:"12px 16px",
             border:"none",background:"none",cursor:"pointer",whiteSpace:"nowrap",
             textTransform:"uppercase",color:tab===t.id?C.blue:C.muted,
             borderBottom:`2px solid ${tab===t.id?C.blue:"transparent"}`,

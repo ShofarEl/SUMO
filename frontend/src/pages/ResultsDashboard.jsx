@@ -36,9 +36,9 @@ const StatCard = ({ label, value, sub, color, icon }) => (
   <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
     <div className="flex items-center justify-between">
       <div>
-        <p className="text-sm font-medium text-gray-600">{label}</p>
-        <p className={`mt-2 text-4xl font-bold ${color}`}>{value}</p>
-        <p className="mt-1 text-sm text-gray-500">{sub}</p>
+        <p className="text-base font-medium text-gray-600">{label}</p>
+        <p className={`mt-2 text-5xl font-bold ${color}`}>{value}</p>
+        <p className="mt-1 text-base text-gray-500">{sub}</p>
       </div>
       <div className={`p-3 rounded-full ${color.replace('text-', 'bg-').replace('-600', '-100')}`}>
         {icon}
@@ -63,7 +63,7 @@ const Tab = ({ label, active, onClick }) => (
 
 // ─── Section heading ──────────────────────────────────────────────────────────
 const SectionTitle = ({ icon, children }) => (
-  <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+  <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
     <span className="mr-2 text-blue-600">{icon}</span>
     {children}
   </h2>

@@ -24,10 +24,10 @@ const ABOUT_CSS = `
   .about-hamburger { display: block !important; }
   .about-mobile-menu.open { display: flex !important; }
   .about-hero-section { padding: 3rem 1.5rem !important; }
-  .about-hero-h1 { font-size: 2rem !important; }
-  .about-hero-p { font-size: 1rem !important; }
+  .about-hero-h1 { font-size: 2.5rem !important; }
+  .about-hero-p { font-size: 1.25rem !important; }
   .about-main { padding: 3rem 1.5rem !important; }
-  .about-section-h2 { font-size: 1.5rem !important; }
+  .about-section-h2 { font-size: 1.875rem !important; }
   .about-method-grid { grid-template-columns: 1fr !important; }
   .about-cta-buttons { flex-direction: column !important; align-items: center !important; }
   .about-cta-buttons a { width: 100% !important; max-width: 280px !important; }
@@ -90,10 +90,10 @@ const AboutPage =()=> {
 
         {/* Hero Content */}
         <div className="about-hero-section" style={{ position: 'relative', zIndex: 5, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '4rem 3.5rem', maxWidth: '740px' }}>
-          <h1 className="about-hero-h1" style={{ fontSize: '18px', fontWeight: 800, color: '#fff', lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: '1.125rem' }}>
+          <h1 className="about-hero-h1" style={{ fontSize: '3.75rem', fontWeight: 800, color: '#fff', lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: '1.125rem' }}>
             About This Research
           </h1>
-          <p className="about-hero-p" style={{ fontSize: '1.125rem', color: 'rgba(255,255,255,0.8)', maxWidth: '700px', lineHeight: 1.7 }}>
+          <p className="about-hero-p" style={{ fontSize: '1.40625rem', color: 'rgba(255,255,255,0.8)', maxWidth: '700px', lineHeight: 1.7 }}>
             A Master's thesis exploring AI-driven traffic management solutions for Georgetown, Guyana
           </p>
         </div>
@@ -110,15 +110,15 @@ const AboutPage =()=> {
         
         {/* Project Overview */}
         <section style={{ marginBottom: '4rem' }}>
-          <h2 className="about-section-h2" style={{ fontSize: '1.875rem', fontWeight: 700, color: '#111827', marginBottom: '1.5rem' }}>
+          <h2 className="about-section-h2" style={{ fontSize: '2.34375rem', fontWeight: 700, color: '#111827', marginBottom: '1.5rem' }}>
             Project Overview
           </h2>
-          <p style={{ fontSize: '1rem', color: '#4b5563', lineHeight: 1.8, marginBottom: '1rem' }}>
+          <p style={{ fontSize: '1.25rem', color: '#4b5563', lineHeight: 1.8, marginBottom: '1rem' }}>
             This research project investigates the application of Artificial Intelligence techniques to predict and manage 
             urban traffic congestion in Georgetown, Guyana. The study focuses on evaluating machine learning prediction 
             models and reinforcement learning-based adaptive signal control through simulation-based analysis.
           </p>
-          <p style={{ fontSize: '1rem', color: '#4b5563', lineHeight: 1.8 }}>
+          <p style={{ fontSize: '1.25rem', color: '#4b5563', lineHeight: 1.8 }}>
             Georgetown faces significant traffic challenges due to rapid urbanization, increasing vehicle ownership, and 
             limited road infrastructure. Traditional fixed-timing traffic signals cannot adapt to dynamic traffic conditions, 
             leading to prolonged delays and congestion. This research explores whether AI-based solutions can provide 
@@ -133,17 +133,17 @@ const AboutPage =()=> {
           </h2>
           <div style={{ background: '#f9fafb', padding: '2rem', borderRadius: '0.75rem', borderLeft: '4px solid #2563eb' }}>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li style={{ fontSize: '1rem', color: '#374151', lineHeight: 1.8, marginBottom: '1rem', paddingLeft: '1.5rem', position: 'relative' }}>
+              <li style={{ fontSize: '1.25rem', color: '#374151', lineHeight: 1.8, marginBottom: '1rem', paddingLeft: '1.5rem', position: 'relative' }}>
                 <span style={{ position: 'absolute', left: 0, color: '#2563eb', fontWeight: 700 }}>1.</span>
                 Evaluate the effectiveness of AI-based predictive techniques (LSTM, Random Forest) in forecasting 
                 short-term traffic congestion compared to traditional methods
               </li>
-              <li style={{ fontSize: '1rem', color: '#374151', lineHeight: 1.8, marginBottom: '1rem', paddingLeft: '1.5rem', position: 'relative' }}>
+              <li style={{ fontSize: '1.25rem', color: '#374151', lineHeight: 1.8, marginBottom: '1rem', paddingLeft: '1.5rem', position: 'relative' }}>
                 <span style={{ position: 'absolute', left: 0, color: '#2563eb', fontWeight: 700 }}>2.</span>
                 Assess how reinforcement learning algorithms (DQN, MARL) can optimize traffic signal timing at 
                 key intersections in Georgetown
               </li>
-              <li style={{ fontSize: '1rem', color: '#374151', lineHeight: 1.8, paddingLeft: '1.5rem', position: 'relative' }}>
+              <li style={{ fontSize: '1.25rem', color: '#374151', lineHeight: 1.8, paddingLeft: '1.5rem', position: 'relative' }}>
                 <span style={{ position: 'absolute', left: 0, color: '#2563eb', fontWeight: 700 }}>3.</span>
                 Identify data infrastructure and governance frameworks required to implement AI-driven traffic 
                 management systems in resource-constrained urban environments
