@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart, BarChart, Cell } from 'recharts';
+import { Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart, BarChart } from 'recharts';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import axios from 'axios';
+import GlobalHeader from '../components/GlobalHeader';
 import '../styles/elegant-theme.css';
 import 'leaflet/dist/leaflet.css';
 
@@ -29,19 +30,6 @@ const IconTraining = () => (
     <path d="M12 2L2 7l10 5 10-5-10-5z"/>
     <path d="M2 17l10 5 10-5"/>
     <path d="M2 12l10 5 10-5"/>
-  </svg>
-);
-const IconMenu = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="2" strokeLinecap="round">
-    <line x1="3" y1="6" x2="21" y2="6"/>
-    <line x1="3" y1="12" x2="21" y2="12"/>
-    <line x1="3" y1="18" x2="21" y2="18"/>
-  </svg>
-);
-const IconClose = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="2" strokeLinecap="round">
-    <line x1="18" y1="6" x2="6" y2="18"/>
-    <line x1="6" y1="6" x2="18" y2="18"/>
   </svg>
 );
 
@@ -77,6 +65,17 @@ const GLOBAL_CSS = `
 .eg-section-hd { text-align: center; margin-bottom: 2.75rem; }
 .eg-section-title { font-size: clamp(1.75rem, 3.75vw, 2.5rem); font-weight: 700; color: #111827; margin-bottom: 0.5rem; }
 .eg-section-sub { font-size: 1.171875rem; color: #6b7280; }
+
+/* HERO - Account for sticky header */
+.eg-hero-section { 
+  position: relative; 
+  min-height: 100vh; 
+  display: flex; 
+  flex-direction: column; 
+  overflow: hidden;
+  margin-top: -64px;
+  padding-top: 64px;
+}
 
 /* CHARTS */
 .eg-charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 1.5rem; }
@@ -161,9 +160,11 @@ export default function ElegantDashboard() {
   const [loading, setLoading] = useState(true);
   const [mapData, setMapData] = useState(null);
   const [trainingData, setTrainingData] = useState([]);
-  const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => { loadData(); }, []);
+  useEffect(() => { 
+    window.scrollTo(0, 0); // Scroll to top on mount
+    loadData(); 
+  }, []);
 
   const loadData = async () => {
     try {
@@ -214,18 +215,21 @@ export default function ElegantDashboard() {
     { name: 'DQN Agent', delay: dqnDelay, queue: dqnQueue },
   ];
   const literatureData = [
-    { study: 'Huang 2024', value: 28 },
-    { study: 'Allison 2024', value: 25 },
-    { study: 'Zhang 2024', value: 34 },
-    { study: 'Your Study', value: parseFloat(delayReduction), highlight: true },
+    { study: 'Huang 2024', value: 28, fill: '#2563eb' },
+    { study: 'Allison 2024', value: 25, fill: '#2563eb' },
+    { study: 'Zhang 2024', value: 34, fill: '#2563eb' },
+    { study: 'Your Study', value: parseFloat(delayReduction), fill: '#10b981' },
   ];
 
   return (
     <div className="eg-page">
       <style>{GLOBAL_CSS}</style>
 
+      {/* Use GlobalHeader component */}
+      <GlobalHeader />
+
       {/* ────────────── HERO ────────────── */}
-      <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <section className="eg-hero-section">
 
         {/* BG image */}
         <img
@@ -238,63 +242,6 @@ export default function ElegantDashboard() {
           position: 'absolute', inset: 0,
           background: 'linear-gradient(to right, rgba(7,18,40,0.92) 0%, rgba(7,18,40,0.76) 55%, rgba(7,18,40,0.48) 100%)',
         }} />
-
-        {/* ── NAV ── */}
-        <nav>
-          <div className="eg-nav">
-            <span style={{ fontSize: '1.0625rem', fontWeight: 700, color: '#fff', letterSpacing: '-0.01em' }}>
-              Georgetown Traffic AI
-            </span>
-
-            <div className="eg-nav-links">
-              <a href="#home">Home</a>
-              <a href="#research">Research</a>
-              <Link to="/results" style={{ color: 'rgba(255,255,255,0.72)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>Results</Link>
-              <Link to="/training-results" style={{ color: 'rgba(255,255,255,0.72)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>Training</Link>
-              <Link to="/about" style={{ color: 'rgba(255,255,255,0.72)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>About</Link>
-            </div>
-
-            <div className="eg-nav-actions">
-              <Link to="/login" style={{ color: 'rgba(255,255,255,0.72)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>
-                Sign In
-              </Link>
-              <Link to="/register" style={{
-                padding: '0.45rem 1.125rem',
-                background: '#f59e0b', color: '#111',
-                textDecoration: 'none', borderRadius: '0.35rem',
-                fontSize: '0.8125rem', fontWeight: 700,
-                letterSpacing: '0.03em', textTransform: 'uppercase',
-              }}>
-                Get Started
-              </Link>
-            </div>
-
-            {/* Hamburger */}
-            <button className="eg-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu">
-              {menuOpen ? <IconClose /> : <IconMenu />}
-            </button>
-          </div>
-
-          {/* Mobile menu */}
-          <div className={`eg-mobile-menu ${menuOpen ? 'open' : ''}`}>
-            <a href="#home" onClick={() => setMenuOpen(false)}>Home</a>
-            <a href="#research" onClick={() => setMenuOpen(false)}>Research</a>
-            <Link to="/results" onClick={() => setMenuOpen(false)} style={{ padding: '0.875rem 1.5rem', color: 'rgba(255,255,255,0.78)', textDecoration: 'none', fontSize: '0.9375rem', fontWeight: 500, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>Results</Link>
-            <Link to="/training-results" onClick={() => setMenuOpen(false)} style={{ padding: '0.875rem 1.5rem', color: 'rgba(255,255,255,0.78)', textDecoration: 'none', fontSize: '0.9375rem', fontWeight: 500, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>Training</Link>
-            <Link to="/about" onClick={() => setMenuOpen(false)} style={{ padding: '0.875rem 1.5rem', color: 'rgba(255,255,255,0.78)', textDecoration: 'none', fontSize: '0.9375rem', fontWeight: 500, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>About</Link>
-            <a href="/login" onClick={() => setMenuOpen(false)} style={{ borderBottom: 'none' }}>Sign In</a>
-            <div className="eg-mobile-cta">
-              <Link to="/register" onClick={() => setMenuOpen(false)} style={{
-                display: 'block', textAlign: 'center', padding: '0.6rem 1rem',
-                background: '#f59e0b', color: '#111', textDecoration: 'none',
-                borderRadius: '0.35rem', fontSize: '0.875rem', fontWeight: 700,
-                letterSpacing: '0.03em', textTransform: 'uppercase',
-              }}>
-                Get Started
-              </Link>
-            </div>
-          </div>
-        </nav>
 
         {/* ── HERO TEXT ── */}
         <div className="eg-hero-content">
@@ -414,11 +361,7 @@ export default function ElegantDashboard() {
                   <XAxis type="number" stroke="#9ca3af" tick={{ fontSize: 12 }} />
                   <YAxis dataKey="study" type="category" stroke="#9ca3af" width={88} tick={{ fontSize: 12 }} />
                   <Tooltip contentStyle={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '0.5rem', fontSize: 12 }} />
-                  <Bar dataKey="value" radius={[0, 5, 5, 0]} name="Delay Reduction (%)">
-                    {literatureData.map((entry, i) => (
-                      <Cell key={i} fill={entry.highlight ? '#10b981' : '#2563eb'} />
-                    ))}
-                  </Bar>
+                  <Bar dataKey="value" fill="#2563eb" radius={[0, 5, 5, 0]} name="Delay Reduction (%)" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

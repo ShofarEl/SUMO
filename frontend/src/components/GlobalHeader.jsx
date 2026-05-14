@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const IconMenu = () => (
@@ -19,14 +19,35 @@ export default function GlobalHeader() {
 
   const isActive = (path) => location.pathname === path;
 
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [menuOpen]);
+
   return (
     <>
       <style>{`
+        .global-header-wrapper {
+          position: sticky;
+          top: 0;
+          z-index: 9999;
+          background: linear-gradient(135deg, #071228 0%, #0a1420 100%);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+          border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        
         @media (max-width: 768px) {
           .global-nav-links { display: none !important; }
-          .global-hamburger { display: block !important; }
-          .global-mobile-menu.open { display: flex !important; }
+          .global-hamburger { display: flex !important; }
         }
+        
         .global-hamburger { 
           display: none; 
           background: none; 
@@ -34,27 +55,99 @@ export default function GlobalHeader() {
           cursor: pointer; 
           padding: 8px; 
           color: white; 
-          transition: opacity 0.2s;
+          transition: all 0.2s;
           border-radius: 4px;
+          align-items: center;
+          justify-content: center;
+          z-index: 10001;
+          position: relative;
         }
         .global-hamburger:hover { 
           opacity: 0.8; 
           background: rgba(255,255,255,0.1);
         }
-        .global-mobile-menu { 
-          display: none; 
-          flex-direction: column; 
-          background: rgba(7,18,40,0.98); 
-          border-top: 1px solid rgba(255,255,255,0.08);
-          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        .global-hamburger:active {
+          transform: scale(0.95);
         }
+        
+        /* Overlay */
+        .global-mobile-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.6);
+          z-index: 9998;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .global-mobile-overlay.open {
+          opacity: 1;
+          visibility: visible;
+        }
+        
+        /* Side Menu */
+        .global-mobile-menu { 
+          position: fixed;
+          top: 0;
+          right: 0;
+          width: 280px;
+          height: 100vh;
+          background: linear-gradient(135deg, #071228 0%, #0a1420 100%);
+          box-shadow: -4px 0 24px rgba(0,0,0,0.5);
+          transform: translateX(100%);
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 10000;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+        }
+        .global-mobile-menu.open {
+          transform: translateX(0);
+        }
+        
+        /* Menu Header */
+        .global-mobile-menu-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 1rem 1.5rem;
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+          background: rgba(0,0,0,0.2);
+        }
+        .global-mobile-menu-title {
+          font-size: 1.125rem;
+          font-weight: 700;
+          color: #fff;
+        }
+        .global-mobile-close {
+          background: none;
+          border: none;
+          color: #fff;
+          cursor: pointer;
+          padding: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+          transition: all 0.2s;
+        }
+        .global-mobile-close:hover {
+          background: rgba(255,255,255,0.1);
+        }
+        
+        /* Menu Links */
         .global-mobile-menu a { 
           padding: 1rem 1.5rem; 
-          color: rgba(255,255,255,0.85); 
+          color: rgba(255,255,255,0.9); 
           text-decoration: none; 
           border-bottom: 1px solid rgba(255,255,255,0.06); 
           transition: all 0.2s;
           font-weight: 500;
+          font-size: 0.9375rem;
+          display: block;
         }
         .global-mobile-menu a:hover { 
           background: rgba(255,255,255,0.08); 
@@ -63,12 +156,36 @@ export default function GlobalHeader() {
         }
         .global-mobile-menu a.active { 
           color: #fbbf24; 
-          background: rgba(251,191,36,0.1);
+          background: rgba(251,191,36,0.12);
           border-left: 3px solid #fbbf24;
+        }
+        .global-mobile-cta {
+          padding: 1rem 1.5rem;
+          margin-top: auto;
+          border-top: 1px solid rgba(255,255,255,0.1);
+          background: rgba(0,0,0,0.2);
+        }
+        .global-mobile-cta a {
+          display: block;
+          text-align: center;
+          padding: 0.75rem 1.5rem;
+          background: #f59e0b;
+          color: #111827;
+          font-weight: 600;
+          border-radius: 0.5rem;
+          text-decoration: none;
+          transition: all 0.2s;
+          border: none;
+        }
+        .global-mobile-cta a:hover {
+          background: #fbbf24;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+          padding-left: 1.5rem;
         }
       `}</style>
 
-      <header className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 shadow-lg sticky top-0 z-50 border-b border-blue-700/30">
+      <header className="global-header-wrapper">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -158,8 +275,24 @@ export default function GlobalHeader() {
           </div>
         </nav>
 
-        {/* Mobile Menu */}
+        {/* Mobile Overlay */}
+        <div 
+          className={`global-mobile-overlay ${menuOpen ? 'open' : ''}`}
+          onClick={() => setMenuOpen(false)}
+        />
+
+        {/* Mobile Side Menu */}
         <div className={`global-mobile-menu ${menuOpen ? 'open' : ''}`}>
+          <div className="global-mobile-menu-header">
+            <span className="global-mobile-menu-title">Menu</span>
+            <button 
+              className="global-mobile-close"
+              onClick={() => setMenuOpen(false)}
+              aria-label="Close menu"
+            >
+              <IconClose />
+            </button>
+          </div>
           <Link 
             to="/" 
             onClick={() => setMenuOpen(false)}
@@ -201,12 +334,10 @@ export default function GlobalHeader() {
           >
             Sign In
           </Link>
-          <div style={{ padding: '1rem 1.5rem', borderBottom: 'none', background: 'rgba(0,0,0,0.2)' }}>
+          <div className="global-mobile-cta">
             <Link 
               to="/register" 
               onClick={() => setMenuOpen(false)}
-              className="block text-center px-4 py-3 rounded-md bg-amber-500 text-gray-900 font-semibold hover:bg-amber-400 transition-all duration-200 shadow-md hover:shadow-lg"
-              style={{ color: '#111827', textDecoration: 'none' }}
             >
               Get Started
             </Link>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import GlobalHeader from "../components/GlobalHeader";
 
 // ══════════════════════════════════════════════════════════════════════════════
 // GEORGETOWN TRAFFIC AI — FULLY RESPONSIVE RESEARCH DASHBOARD
@@ -71,6 +72,9 @@ body{background:#07090f;color:#e2e8f0;font-family:'DM Sans',sans-serif;-webkit-t
 
 /* Table overflow */
 .resp-table{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+
+/* Page header nav links */
+.page-header-nav a:hover{color:#e2e8f0 !important;}
 
 /* ── MOBILE BREAKPOINT ── */
 @media(max-width:639px){
@@ -517,10 +521,26 @@ function SimulationTab(){
 
   return(
     <div className="fade-up">
+      {/* Explanation Card */}
+      <Card style={{marginBottom:10,background:`${C.blue}08`,border:`1px solid ${C.blue}28`}}>
+        <div style={{fontSize:14,fontWeight:700,marginBottom:8,color:C.blue}}>
+          🎯 What You're Seeing — Live Reinforcement Learning Training
+        </div>
+        <div style={{fontSize:13,color:C.muted,lineHeight:1.8}}>
+          This visualization demonstrates <strong style={{color:C.text}}>Research Question 2</strong>: comparing fixed-timing baseline control against a DQN (Deep Q-Network) reinforcement learning agent learning optimal signal policies over 50 episodes.
+          <br/><br/>
+          <strong style={{color:C.text}}>Left (Baseline):</strong> Traditional fixed 60-second signal timing — the current approach used in most cities.
+          <br/>
+          <strong style={{color:C.green}}>Right (DQN Agent):</strong> AI agent that observes queue lengths and vehicle arrivals, dynamically adjusting signal phases to minimize congestion.
+          <br/><br/>
+          <strong style={{color:C.amber}}>Key Insight:</strong> The DQN agent learns through trial and error, improving performance episode by episode. Blue vehicles are moving freely; red vehicles are queued at signals. Green/red lights show signal states. Watch how the AI reduces queuing over time.
+        </div>
+      </Card>
+
       <Card style={{marginBottom:10,padding:"12px 14px"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
           <div style={{...mono,fontSize:12.5,color:C.muted}}>
-            Episode <strong style={{color:C.text}}>{episode}</strong><span style={{color:C.dim}}> / 50</span>
+            Training Episode <strong style={{color:C.text}}>{episode}</strong><span style={{color:C.dim}}> / 50</span>
           </div>
           <div style={{...mono,fontSize:13.75,fontWeight:700,color:episode>0?C.green:C.dim}}>{improvement}</div>
         </div>
@@ -575,17 +595,30 @@ function SimulationTab(){
 function OverviewTab(){
   return(
     <div className="fade-up">
+      {/* Research Context Banner */}
+      <Card style={{marginBottom:10,background:`linear-gradient(135deg,${C.blue}12,${C.purple}08)`,border:`1px solid ${C.blue}28`}}>
+        <div style={{fontSize:13.75,fontWeight:700,marginBottom:8,color:C.blue}}>
+          📚 Master's Thesis Research — Georgetown, Guyana
+        </div>
+        <div style={{fontSize:13.75,color:C.text,lineHeight:1.8,marginBottom:8}}>
+          <strong>Title:</strong> Application of Artificial Intelligence Techniques in Predicting and Managing Urban Traffic Congestion in Georgetown
+        </div>
+        <div style={{fontSize:12.5,color:C.muted,lineHeight:1.7}}>
+          <strong>Research Design:</strong> Mixed-methods simulation-based feasibility study combining quantitative performance evaluation with qualitative institutional assessment. This platform demonstrates the technical findings from Chapter 3 (Methodology) addressing all three research questions through controlled SUMO simulation experiments.
+        </div>
+      </Card>
+
       <div style={{background:`linear-gradient(135deg,${C.green}14,${C.blue}08)`,
         border:`1px solid ${C.green}28`,borderRadius:14,padding:16,marginBottom:10}}>
         <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
           <span style={{fontSize:18}}>🏆</span>
-          <span style={{...mono,fontSize:9,color:C.green,letterSpacing:".07em",textTransform:"uppercase"}}>Main Finding — DQN Signal Control</span>
+          <span style={{...mono,fontSize:9,color:C.green,letterSpacing:".07em",textTransform:"uppercase"}}>Main Finding — DQN Signal Control (RQ2)</span>
         </div>
         <div className="hero-num" style={{...mono,fontSize:36,fontWeight:700,color:C.green,lineHeight:1,marginBottom:6}}>35.7%</div>
         <div style={{fontSize:16.25,fontWeight:600,marginBottom:4}}>Delay reduced: 42.71s → 27.45s</div>
         <div style={{fontSize:13.75,color:C.muted,lineHeight:1.7}}>
-          DQN RL agent · 50 episodes · Georgetown OSM network.<br/>
-          Exceeds literature benchmark of 25–34%. Queue also ↓ 39.6%.
+          DQN RL agent · 50 episodes · Georgetown OSM network · SUMO simulator<br/>
+          Exceeds literature benchmark of 25–34% (Huang 2024, Allison 2024, Zhang 2024). Queue also ↓ 39.6%.
         </div>
       </div>
 
@@ -605,33 +638,90 @@ function OverviewTab(){
       </div>
 
       <Card style={{marginBottom:10}}>
-        <Label>Study Overview</Label>
+        <Label>Methodology Overview — Chapter 3 Implementation</Label>
+        <p style={{fontSize:15,color:C.muted,lineHeight:1.8,marginBottom:12}}>
+          This study follows a <strong style={{color:C.text}}>mixed-methods research design</strong> combining:
+        </p>
+        <div style={{display:"grid",gridTemplateColumns:"1fr",gap:10}}>
+          {[
+            {
+              num:"1",
+              title:"Quantitative Simulation Analysis",
+              desc:"Microscopic traffic simulation using SUMO (Simulation of Urban Mobility) to evaluate AI-based traffic prediction and RL-based adaptive signal control under controlled conditions.",
+              color:C.blue
+            },
+            {
+              num:"2",
+              title:"Qualitative Feasibility Assessment",
+              desc:"Institutional readiness evaluation examining data availability, sensor infrastructure, computational capacity, and governance frameworks required for real-world deployment.",
+              color:C.amber
+            }
+          ].map(({num,title,desc,color})=>(
+            <div key={num} style={{display:"flex",gap:10,padding:12,background:"rgba(255,255,255,.02)",borderRadius:8,border:`1px solid ${C.border}`}}>
+              <div style={{width:32,height:32,borderRadius:8,background:`${color}18`,border:`1px solid ${color}35`,display:"flex",alignItems:"center",justifyContent:"center",...mono,fontSize:16,fontWeight:700,color,flexShrink:0}}>
+                {num}
+              </div>
+              <div>
+                <div style={{fontSize:14,fontWeight:600,marginBottom:4,color}}>{title}</div>
+                <div style={{fontSize:12.5,color:C.muted,lineHeight:1.7}}>{desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card style={{marginBottom:10}}>
+        <Label>Study Scope & Limitations</Label>
         <p style={{fontSize:15,color:C.muted,lineHeight:1.8}}>
-          Simulation-based feasibility study evaluating AI for traffic management in{" "}
-          <strong style={{color:C.text}}>Georgetown, Guyana</strong> — Sheriff Street / Vlissengen Road corridor.
-          Real OpenStreetMap road network data. Not a live deployment; results use synthetic data
-          calibrated to Georgetown peak-hour conditions.
+          <strong style={{color:C.text}}>Simulation-based feasibility study</strong> for Georgetown, Guyana — Sheriff Street / Vlissengen Road corridor.
+          Uses real OpenStreetMap road network data with synthetic traffic demand calibrated to Georgetown peak-hour conditions.
+          <strong style={{color:C.amber}}> Not a live deployment</strong> — results demonstrate technical feasibility and provide evidence-based recommendations for policymakers.
+          Real-world validation with actual sensor data required before operational implementation.
         </p>
       </Card>
 
       <Card style={{marginBottom:10}}>
-        <Label>Research Questions</Label>
+        <Label>Three Research Questions — Systematic Investigation</Label>
         {[
-          {icon:"🚦",rq:"RQ1",title:"Traffic Prediction",status:"✓ RF wins — RMSE 3.826s",type:"ready"},
-          {icon:"🤖",rq:"RQ2",title:"RL Signal Control",status:"✓ DQN 35.7% — exceeds benchmark",type:"ready"},
-          {icon:"🏛️",rq:"RQ3",title:"Data Infrastructure",status:"→ Feasibility assessed",type:"partial"},
-        ].map(({icon,rq,title,status,type},i,arr)=>(
-          <div key={rq} style={{display:"flex",alignItems:"center",gap:10,
-            padding:"10px 0",borderBottom:i<arr.length-1?`1px solid ${C.border}`:"none"}}>
-            <div style={{width:32,height:32,borderRadius:8,background:"rgba(59,130,246,.12)",
-              display:"flex",alignItems:"center",justifyContent:"center",fontSize:18.75,flexShrink:0}}>
-              {icon}
-            </div>
-            <div style={{flex:1,minWidth:0}}>
-              <div style={{fontSize:15,fontWeight:600,marginBottom:3}}>
-                <span style={{...mono,fontSize:11.25,color:C.blue,marginRight:5}}>{rq}</span>{title}
+          {icon:"🚦",rq:"RQ1",title:"Traffic Prediction Accuracy",
+           question:"What is the effectiveness of selected AI-enabled deep learning and spatio-temporal models in predicting short-term traffic conditions leading to congestion?",
+           answer:"Random Forest achieved best performance (RMSE 3.826s) outperforming LSTM (5.955s) and ARIMA (5.967s). Ensemble methods prove more robust in data-sparse settings.",
+           status:"✓ Answered — RF wins",type:"ready",metric:"RMSE 3.826s"},
+          {icon:"🤖",rq:"RQ2",title:"RL-Based Adaptive Signal Control",
+           question:"How well can the strategies of adaptive signal control implemented through reinforcement learning be used to minimize the congestion in simulated urban traffic?",
+           answer:"DQN agent reduced average delay by 35.7% (42.71s → 27.45s) and queue length by 39.6%, exceeding published benchmarks of 25-34%. Demonstrates RL feasibility for Georgetown.",
+           status:"✓ Answered — 35.7% reduction",type:"ready",metric:"35.7% ↓ delay"},
+          {icon:"🏛️",rq:"RQ3",title:"Implementation Feasibility",
+           question:"Which data, infrastructure, and governance conditions affect the performance of the implementation of AI-based traffic solutions in Georgetown?",
+           answer:"Identified key constraints: limited sensor coverage (SRIS cameras lack real-time pipelines), need for data governance frameworks, institutional coordination requirements, and capacity building needs.",
+           status:"✓ Assessed — roadmap provided",type:"partial",metric:"4-phase plan"},
+        ].map(({icon,rq,title,question,answer,status,type,metric},i,arr)=>(
+          <div key={rq} style={{
+            padding:"14px 0",
+            borderBottom:i<arr.length-1?`1px solid ${C.border}`:"none"
+          }}>
+            <div style={{display:"flex",alignItems:"flex-start",gap:10,marginBottom:8}}>
+              <div style={{width:36,height:36,borderRadius:8,background:"rgba(59,130,246,.12)",
+                display:"flex",alignItems:"center",justifyContent:"center",fontSize:18.75,flexShrink:0}}>
+                {icon}
               </div>
-              <StatusBadge text={status} type={type}/>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontSize:15,fontWeight:600,marginBottom:4}}>
+                  <span style={{...mono,fontSize:11.25,color:C.blue,marginRight:5}}>{rq}</span>{title}
+                </div>
+                <div style={{fontSize:12.5,color:C.muted,fontStyle:"italic",lineHeight:1.6,marginBottom:6}}>
+                  "{question}"
+                </div>
+                <div style={{fontSize:13,color:C.text,lineHeight:1.7,marginBottom:6,padding:10,background:"rgba(255,255,255,.02)",borderRadius:6,borderLeft:`3px solid ${C.green}`}}>
+                  <strong style={{color:C.green}}>Finding:</strong> {answer}
+                </div>
+                <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
+                  <StatusBadge text={status} type={type}/>
+                  <span style={{...mono,fontSize:11,color:C.blue,background:`${C.blue}12`,padding:"3px 8px",borderRadius:4}}>
+                    {metric}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         ))}
@@ -664,14 +754,33 @@ function OverviewTab(){
 function PredictionTab(){
   return(
     <div className="fade-up">
+      {/* Methodology Explanation */}
+      <Card style={{marginBottom:10,background:`${C.purple}08`,border:`1px solid ${C.purple}28`}}>
+        <div style={{fontSize:14,fontWeight:700,marginBottom:8,color:C.purple}}>
+          📊 Research Question 1 — Traffic Prediction Models
+        </div>
+        <div style={{fontSize:13,color:C.muted,lineHeight:1.8}}>
+          <strong style={{color:C.text}}>Objective:</strong> Compare AI-enabled deep learning and spatio-temporal models for predicting short-term traffic conditions (queue lengths, vehicle arrivals) to enable proactive signal control.
+          <br/><br/>
+          <strong style={{color:C.text}}>Models Evaluated:</strong>
+          <br/>• <strong style={{color:C.amber}}>Random Forest</strong> — Ensemble learning method combining multiple decision trees
+          <br/>• <strong style={{color:C.purple}}>LSTM</strong> — Long Short-Term Memory deep neural network for temporal sequences
+          <br/>• <strong style={{color:C.red}}>ARIMA</strong> — Classical time-series forecasting baseline
+          <br/><br/>
+          <strong style={{color:C.text}}>Evaluation Metrics:</strong> RMSE (Root Mean Square Error) and MAE (Mean Absolute Error) — lower values indicate better prediction accuracy.
+          <br/><br/>
+          <strong style={{color:C.amber}}>Key Finding:</strong> Random Forest achieved best performance in data-sparse Georgetown context, demonstrating that ensemble methods can outperform deep learning when training data is limited.
+        </div>
+      </Card>
+
       <div style={{background:`${C.amber}0e`,border:`1px solid ${C.amber}28`,
         borderRadius:14,padding:14,marginBottom:10,display:"flex",gap:10,alignItems:"flex-start"}}>
         <span style={{fontSize:25,flexShrink:0}}>🏆</span>
         <div>
-          <div style={{fontSize:16.25,fontWeight:700,color:C.amber,marginBottom:2}}>Random Forest — Best Model</div>
+          <div style={{fontSize:16.25,fontWeight:700,color:C.amber,marginBottom:2}}>Random Forest — Best Model (RQ1 Answer)</div>
           <div style={{fontSize:13.75,color:C.text,lineHeight:1.7}}>
             <strong>RMSE 3.826s</strong> vs LSTM (5.955s) and ARIMA (5.967s).
-            Ensemble methods beat deep learning in data-sparse settings like Georgetown.
+            Ensemble methods beat deep learning in data-sparse settings like Georgetown — a significant finding for Caribbean and developing-region AI research.
           </div>
         </div>
       </div>
@@ -748,12 +857,34 @@ function PredictionTab(){
 function RLTab(){
   return(
     <div className="fade-up">
+      {/* Methodology Explanation */}
+      <Card style={{marginBottom:10,background:`${C.green}08`,border:`1px solid ${C.green}28`}}>
+        <div style={{fontSize:14,fontWeight:700,marginBottom:8,color:C.green}}>
+          🤖 Research Question 2 — Reinforcement Learning Signal Control
+        </div>
+        <div style={{fontSize:13,color:C.muted,lineHeight:1.8}}>
+          <strong style={{color:C.text}}>Objective:</strong> Evaluate how well RL-based adaptive signal control can minimize congestion compared to traditional fixed-timing approaches.
+          <br/><br/>
+          <strong style={{color:C.text}}>Approach:</strong> Deep Q-Network (DQN) agent trained in SUMO microscopic traffic simulator. The agent observes traffic state (queue lengths, vehicle counts) and learns optimal signal phase timing through interaction with the environment.
+          <br/><br/>
+          <strong style={{color:C.text}}>Training Setup:</strong>
+          <br/>• 50 episodes on Google Colab T4 GPU
+          <br/>• Georgetown OSM network (Sheriff St / Vlissengen Rd corridor)
+          <br/>• Reward function: minimize average vehicle delay + queue length
+          <br/>• Baseline comparison: Fixed 60-second signal timing
+          <br/><br/>
+          <strong style={{color:C.text}}>Performance Metrics:</strong> Average vehicle delay (seconds), average queue length (vehicles), throughput (vehicles/hour)
+          <br/><br/>
+          <strong style={{color:C.green}}>Key Finding:</strong> DQN agent achieved 35.7% delay reduction, exceeding published benchmarks (Huang 2024: 28%, Allison 2024: 25%, Zhang 2024: 34%). This validates RL feasibility for Georgetown and answers RQ2.
+        </div>
+      </Card>
+
       <div style={{background:`linear-gradient(135deg,${C.green}14,${C.blue}08)`,
         border:`1px solid ${C.green}30`,borderRadius:14,padding:16,marginBottom:10}}>
         <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
           <span style={{fontSize:20}}>🤖</span>
           <div>
-            <div style={{...mono,fontSize:11.25,color:C.green,letterSpacing:".07em",textTransform:"uppercase",marginBottom:2}}>Main Contribution — RQ2</div>
+            <div style={{...mono,fontSize:11.25,color:C.green,letterSpacing:".07em",textTransform:"uppercase",marginBottom:2}}>Main Contribution — RQ2 Answer</div>
             <div style={{fontSize:17.5,fontWeight:700}}>DQN Adaptive Signal Control</div>
           </div>
         </div>
@@ -876,6 +1007,29 @@ function MapTab(){
 function FeasibilityTab(){
   return(
     <div className="fade-up">
+      {/* Methodology Explanation */}
+      <Card style={{marginBottom:10,background:`${C.amber}08`,border:`1px solid ${C.amber}28`}}>
+        <div style={{fontSize:14,fontWeight:700,marginBottom:8,color:C.amber}}>
+          🏛️ Research Question 3 — Implementation Feasibility Assessment
+        </div>
+        <div style={{fontSize:13,color:C.muted,lineHeight:1.8}}>
+          <strong style={{color:C.text}}>Objective:</strong> Identify data, infrastructure, and governance conditions that affect the implementation of AI-based traffic solutions in Georgetown.
+          <br/><br/>
+          <strong style={{color:C.text}}>Assessment Framework:</strong> Qualitative feasibility analysis examining:
+          <br/>• <strong>Technical Feasibility:</strong> Sensor coverage, data quality, computational requirements
+          <br/>• <strong>Institutional Feasibility:</strong> Governance structures, coordination mechanisms, policy frameworks
+          <br/>• <strong>Operational Feasibility:</strong> Capacity building needs, maintenance requirements, scalability
+          <br/><br/>
+          <strong style={{color:C.text}}>Key Constraints Identified:</strong>
+          <br/>• Limited real-time sensor data (SRIS cameras lack streaming pipelines)
+          <br/>• Need for data governance and privacy frameworks
+          <br/>• Institutional coordination between Ministry of Public Works and Mayor's office
+          <br/>• Local AI expertise and capacity building requirements
+          <br/><br/>
+          <strong style={{color:C.amber}}>Recommendation:</strong> Phased 4-stage deployment roadmap starting with pilot sensors at 2-3 intersections, scaling to corridor-wide implementation over 36 months.
+        </div>
+      </Card>
+
       <div className="grid-2 col-stack" style={{marginBottom:10}}>
         <Card>
           <Label>Technical Feasibility</Label>
@@ -982,27 +1136,14 @@ export default function GeorgetownDashboard(){
     <div style={{background:C.bg,color:C.text,fontFamily:"'DM Sans',sans-serif",minHeight:"100vh",overflowX:"hidden"}}>
       <style>{CSS}</style>
 
-      {/* ── HEADER ── */}
-      <header className="header-el" style={{
-        borderBottom:`1px solid ${C.border}`,padding:"0 24px",
-        display:"flex",alignItems:"center",justifyContent:"space-between",
-        height:54,background:"rgba(7,9,15,.97)",position:"sticky",top:0,zIndex:100,
-        backdropFilter:"blur(14px)",
-      }}>
-        <div style={{display:"flex",alignItems:"center",gap:8}}>
-          <div style={{width:7,height:7,borderRadius:"50%",background:C.green,animation:"pulse 2s infinite"}}/>
-          <span style={{...mono,fontSize:15,letterSpacing:".07em"}}>Georgetown Traffic AI</span>
-        </div>
-        <div style={{display:"flex",gap:6,alignItems:"center"}}>
-          <Tag color={C.green}>35.7% ↓</Tag>
-          <span className="hide-mobile"><Tag color={C.blue}>OSM · 2,646 Junctions</Tag></span>
-        </div>
-      </header>
+      {/* Use GlobalHeader component */}
+      <GlobalHeader />
 
       {/* ── TOP NAV (desktop only) ── */}
       <nav className="top-nav" style={{
         display:"flex",padding:"0 24px",borderBottom:`1px solid ${C.border}`,
         background:C.surface,overflowX:"auto",scrollbarWidth:"none",
+        position:"sticky",top:0,zIndex:100,
       }}>
         <style>{`.top-nav::-webkit-scrollbar{display:none}`}</style>
         {TAB_CONFIG.map(t=>(
