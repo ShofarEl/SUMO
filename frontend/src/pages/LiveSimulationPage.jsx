@@ -623,12 +623,12 @@ function OverviewTab({simState,onNavigate}){
                 </div>
               </div>
               <button
-                onClick={()=>onNavigate("simulation")}
-                style={{...mono,fontSize:11,fontWeight:700,padding:"8px 16px",borderRadius:8,border:`1px solid ${C.green}`,background:`${C.green}20`,color:C.green,cursor:"pointer",transition:"all .15s"}}
-                onMouseEnter={(e)=>e.target.style.background=`${C.green}30`}
-                onMouseLeave={(e)=>e.target.style.background=`${C.green}20`}
+                onClick={()=>onNavigate("prediction")}
+                style={{...mono,fontSize:11,fontWeight:700,padding:"8px 16px",borderRadius:8,border:`1px solid ${C.blue}`,background:`${C.blue}20`,color:C.blue,cursor:"pointer",transition:"all .15s"}}
+                onMouseEnter={(e)=>e.target.style.background=`${C.blue}30`}
+                onMouseLeave={(e)=>e.target.style.background=`${C.blue}20`}
               >
-                Ready? Go to Sim Tab →
+                Next: Learn About Models →
               </button>
             </div>
           </div>
@@ -979,16 +979,16 @@ function SimulationTab({simState,fixedRef,aiRef,onNavigate}){
   );
 }
 
-function PredictionTab(){
+function PredictionTab({onNavigate}){
   return(
     <div className="fade-up">
       <Card style={{marginBottom:10,background:`${C.purple}08`,border:`1px solid ${C.purple}28`,padding:14}}>
         <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
           <div style={{fontSize:24,flexShrink:0}}>📊</div>
           <div style={{flex:1}}>
-            <div style={{fontSize:14,fontWeight:700,marginBottom:4,color:C.purple}}>Traffic Prediction Models (RQ1)</div>
+            <div style={{fontSize:14,fontWeight:700,marginBottom:4,color:C.purple}}>Step 2: Understanding the Models</div>
             <div style={{fontSize:12,color:C.muted}}>
-              This tab shows how different AI models predict traffic conditions. <strong style={{color:C.text}}>Random Forest</strong> achieved the best performance with RMSE of 3.826s.
+              Learn about the different AI models we're using to predict and manage traffic. This will help you understand what happens when you run the simulation.
             </div>
           </div>
         </div>
@@ -1048,6 +1048,15 @@ function PredictionTab(){
           </div>
         </Card>
       </div>
+
+      <button
+        onClick={()=>onNavigate("simulation")}
+        style={{...mono,width:"100%",padding:"14px 24px",fontSize:13,fontWeight:700,letterSpacing:".04em",borderRadius:10,border:`1px solid ${C.green}`,background:`${C.green}20`,color:C.green,cursor:"pointer",transition:"all .15s"}}
+        onMouseEnter={(e)=>e.target.style.background=`${C.green}30`}
+        onMouseLeave={(e)=>e.target.style.background=`${C.green}20`}
+      >
+        Next: Run the Simulation →
+      </button>
     </div>
   );
 }
@@ -1280,13 +1289,14 @@ function FeasibilityTab(){
 }
 
 // ── TAB CONFIG ────────────────────────────────────────────────────────────────
+// CHRONOLOGICAL FLOW: Welcome → Models → Interact → Results
 const TAB_CONFIG = [
-  {id:"overview",    label:"Overview",  icon:"◉"},
-  {id:"simulation",  label:"Sim",       icon:"▶"},
-  {id:"prediction",  label:"Models",    icon:"📊"},
-  {id:"rl",          label:"RL",        icon:"🤖"},
-  {id:"map",         label:"Map",       icon:"🗺"},
-  {id:"feasibility", label:"Feasib.",   icon:"✓"},
+  {id:"overview",    label:"Welcome",   icon:"👋"},  // 1. Introduction & what they'll do
+  {id:"prediction",  label:"Models",    icon:"📊"},  // 2. Explanation of models
+  {id:"simulation",  label:"Interact",  icon:"▶"},   // 3. Run the simulation
+  {id:"rl",          label:"Results",   icon:"🤖"},  // 4. Descriptive analysis
+  {id:"map",         label:"Map",       icon:"🗺"},  // 5. Supporting info
+  {id:"feasibility", label:"Feasib.",   icon:"✓"},   // 6. Supporting info
 ];
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -1443,7 +1453,7 @@ export function GeorgetownDashboard(){
   const tabContent = {
     overview:    <OverviewTab    simState={simState} onNavigate={setTab}/>,
     simulation:  <SimulationTab simState={simState} fixedRef={fixedRef} aiRef={aiRef} onNavigate={setTab}/>,
-    prediction:  <PredictionTab/>,
+    prediction:  <PredictionTab onNavigate={setTab}/>,
     rl:          <RLTab          simState={simState} onNavigate={setTab}/>,
     map:         <MapTab/>,
     feasibility: <FeasibilityTab/>,
