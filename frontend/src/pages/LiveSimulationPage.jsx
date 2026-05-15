@@ -572,10 +572,53 @@ function MapCanvas(){
 // TAB COMPONENTS — all driven by simulation state from root
 // ══════════════════════════════════════════════════════════════════════════════
 
-function OverviewTab({simState}){
+function OverviewTab({simState,onNavigate}){
   const {trained,currentEp,targetEps,aiStats,improvement} = simState;
   return(
     <div className="fade-up">
+      {/* GUIDANCE BANNER */}
+      {!trained && (
+        <Card style={{marginBottom:10,background:`linear-gradient(135deg,${C.amber}14,${C.blue}08)`,border:`1px solid ${C.amber}35`,padding:16}}>
+          <div style={{display:"flex",alignItems:"flex-start",gap:12}}>
+            <div style={{fontSize:32,flexShrink:0}}>👋</div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:15,fontWeight:700,marginBottom:6,color:C.amber}}>Welcome! Here's How to Operate This Simulation</div>
+              <div style={{fontSize:13,color:C.text,lineHeight:1.8,marginBottom:10}}>
+                This dashboard lets you <strong>run and analyze</strong> AI-powered traffic simulations for Georgetown. Follow these steps:
+              </div>
+              <div style={{display:"grid",gap:8,marginBottom:12}}>
+                <div style={{display:"flex",gap:8,alignItems:"flex-start"}}>
+                  <div style={{...mono,fontSize:11,fontWeight:700,color:C.blue,background:`${C.blue}20`,padding:"2px 8px",borderRadius:5,flexShrink:0}}>STEP 1</div>
+                  <div style={{fontSize:12,color:C.muted,lineHeight:1.6}}>
+                    Use the <strong style={{color:C.text}}>control panel at the top</strong> to select episodes (12/25/50) and speed, then click <strong style={{color:C.green}}>▶ Run simulation</strong>
+                  </div>
+                </div>
+                <div style={{display:"flex",gap:8,alignItems:"flex-start"}}>
+                  <div style={{...mono,fontSize:11,fontWeight:700,color:C.blue,background:`${C.blue}20`,padding:"2px 8px",borderRadius:5,flexShrink:0}}>STEP 2</div>
+                  <div style={{fontSize:12,color:C.muted,lineHeight:1.6}}>
+                    Go to the <strong style={{color:C.text}}>Sim tab</strong> to watch live training with real-time traffic visualization
+                  </div>
+                </div>
+                <div style={{display:"flex",gap:8,alignItems:"flex-start"}}>
+                  <div style={{...mono,fontSize:11,fontWeight:700,color:C.blue,background:`${C.blue}20`,padding:"2px 8px",borderRadius:5,flexShrink:0}}>STEP 3</div>
+                  <div style={{fontSize:12,color:C.muted,lineHeight:1.6}}>
+                    Explore <strong style={{color:C.text}}>Models, RL, Map, and Feasib.</strong> tabs for detailed analysis and results
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={()=>onNavigate("simulation")}
+                style={{...mono,fontSize:11,fontWeight:700,padding:"8px 16px",borderRadius:8,border:`1px solid ${C.green}`,background:`${C.green}20`,color:C.green,cursor:"pointer",transition:"all .15s"}}
+                onMouseEnter={(e)=>e.target.style.background=`${C.green}30`}
+                onMouseLeave={(e)=>e.target.style.background=`${C.green}20`}
+              >
+                Ready? Go to Sim Tab →
+              </button>
+            </div>
+          </div>
+        </Card>
+      )}
+
       <Card style={{marginBottom:10,background:`linear-gradient(135deg,${C.blue}12,${C.purple}08)`,border:`1px solid ${C.blue}28`}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:6,color:C.blue}}>Master's Thesis Research — Georgetown, Guyana</div>
         <div style={{fontSize:13,color:C.text,lineHeight:1.8,marginBottom:6}}>
@@ -583,6 +626,132 @@ function OverviewTab({simState}){
         </div>
         <div style={{fontSize:12,color:C.muted,lineHeight:1.7}}>
           Mixed-methods simulation-based feasibility study. Use the <strong style={{color:C.blue}}>▶ Run simulation</strong> control at the top to train the DQN agent and populate all charts across the dashboard.
+        </div>
+      </Card>
+
+      {/* EDUCATIONAL SECTION - Understanding the Dashboard */}
+      <Card style={{marginBottom:10}}>
+        <Label>📚 Understanding This Dashboard</Label>
+        <div style={{display:"grid",gap:12}}>
+          <div style={{padding:12,background:"rgba(255,255,255,.02)",borderRadius:10,border:`1px solid ${C.border}`}}>
+            <div style={{fontSize:13,fontWeight:600,marginBottom:6,color:C.blue}}>🤖 What Are the AI Models?</div>
+            <div style={{fontSize:12,color:C.muted,lineHeight:1.7,marginBottom:8}}>
+              This research compares different approaches to traffic management:
+            </div>
+            <div style={{display:"grid",gap:8}}>
+              <div style={{paddingLeft:12,borderLeft:`2px solid ${C.red}`}}>
+                <div style={{fontSize:12,fontWeight:600,color:C.text,marginBottom:2}}>Baseline (Fixed-Time)</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>
+                  Traditional traffic lights with predetermined schedules (e.g., 60 seconds green, 30 seconds red). 
+                  They don't adapt to actual traffic conditions.
+                </div>
+              </div>
+              <div style={{paddingLeft:12,borderLeft:`2px solid ${C.green}`}}>
+                <div style={{fontSize:12,fontWeight:600,color:C.text,marginBottom:2}}>DQN (Deep Q-Network)</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>
+                  An AI agent that learns optimal signal timing by observing traffic patterns and receiving rewards 
+                  for reducing congestion. It adapts in real-time.
+                </div>
+              </div>
+              <div style={{paddingLeft:12,borderLeft:`2px solid ${C.purple}`}}>
+                <div style={{fontSize:12,fontWeight:600,color:C.text,marginBottom:2}}>MARL (Multi-Agent RL)</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>
+                  Multiple AI agents working together across intersections to coordinate traffic flow city-wide, 
+                  creating "green waves" and synchronized signals.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{padding:12,background:"rgba(255,255,255,.02)",borderRadius:10,border:`1px solid ${C.border}`}}>
+            <div style={{fontSize:13,fontWeight:600,marginBottom:6,color:C.amber}}>📈 What Are Episodes?</div>
+            <div style={{fontSize:12,color:C.muted,lineHeight:1.7,marginBottom:8}}>
+              An <strong style={{color:C.text}}>episode</strong> is one complete training cycle where the AI agent:
+            </div>
+            <ol style={{fontSize:11,color:C.muted,lineHeight:1.8,paddingLeft:20,marginBottom:8}}>
+              <li>Observes the current traffic state (queue lengths, vehicle arrivals)</li>
+              <li>Decides which signal phase to activate (green/red for each direction)</li>
+              <li>Receives feedback (reward) based on how well it reduced delays</li>
+              <li>Updates its knowledge and improves its decision-making</li>
+            </ol>
+            <div style={{fontSize:11,color:C.amber,background:`${C.amber}12`,padding:"6px 8px",borderRadius:6,border:`1px solid ${C.amber}28`}}>
+              💡 <strong>More episodes = Better learning.</strong> The AI gets smarter with each episode, like practicing a skill!
+            </div>
+          </div>
+
+          <div style={{padding:12,background:"rgba(255,255,255,.02)",borderRadius:10,border:`1px solid ${C.border}`}}>
+            <div style={{fontSize:13,fontWeight:600,marginBottom:6,color:C.green}}>📊 Key Metrics Explained</div>
+            <div style={{display:"grid",gap:6}}>
+              <div>
+                <div style={{fontSize:12,fontWeight:600,color:C.text,marginBottom:2}}>Average Delay</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>
+                  How long vehicles wait at intersections (in seconds). Lower is better. Baseline: 42.71s
+                </div>
+              </div>
+              <div>
+                <div style={{fontSize:12,fontWeight:600,color:C.text,marginBottom:2}}>Queue Length</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>
+                  Average number of vehicles waiting at red lights. Lower means less congestion. Baseline: 10.92 vehicles
+                </div>
+              </div>
+              <div>
+                <div style={{fontSize:12,fontWeight:600,color:C.text,marginBottom:2}}>Throughput</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>
+                  Number of vehicles passing through per hour. Higher is better. Baseline: 850 veh/hr
+                </div>
+              </div>
+              <div>
+                <div style={{fontSize:12,fontWeight:600,color:C.text,marginBottom:2}}>RMSE (Root Mean Square Error)</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>
+                  Measures prediction accuracy. Lower values mean better predictions. Best: 3.826s (Random Forest)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{padding:12,background:"rgba(255,255,255,.02)",borderRadius:10,border:`1px solid ${C.border}`}}>
+            <div style={{fontSize:13,fontWeight:600,marginBottom:6,color:C.purple}}>🗂️ Dashboard Tabs Explained</div>
+            <div style={{display:"grid",gap:6}}>
+              <div style={{display:"flex",gap:8}}>
+                <div style={{...mono,fontSize:10,color:C.blue,background:`${C.blue}15`,padding:"2px 6px",borderRadius:4,flexShrink:0}}>Overview</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>This page - summary and instructions</div>
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <div style={{...mono,fontSize:10,color:C.blue,background:`${C.blue}15`,padding:"2px 6px",borderRadius:4,flexShrink:0}}>Sim</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>Watch live training with traffic visualization</div>
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <div style={{...mono,fontSize:10,color:C.blue,background:`${C.blue}15`,padding:"2px 6px",borderRadius:4,flexShrink:0}}>Models</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>Traffic prediction model comparison (RQ1)</div>
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <div style={{...mono,fontSize:10,color:C.blue,background:`${C.blue}15`,padding:"2px 6px",borderRadius:4,flexShrink:0}}>RL</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>Reinforcement learning results and analysis (RQ2)</div>
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <div style={{...mono,fontSize:10,color:C.blue,background:`${C.blue}15`,padding:"2px 6px",borderRadius:4,flexShrink:0}}>Map</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>Georgetown road network from OpenStreetMap</div>
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <div style={{...mono,fontSize:10,color:C.blue,background:`${C.blue}15`,padding:"2px 6px",borderRadius:4,flexShrink:0}}>Feasib.</div>
+                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>Implementation feasibility assessment (RQ3)</div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{padding:12,background:`linear-gradient(135deg,${C.green}12,${C.blue}08)`,borderRadius:10,border:`1px solid ${C.green}28`}}>
+            <div style={{fontSize:13,fontWeight:600,marginBottom:6,color:C.green}}>💡 What This Means for Georgetown</div>
+            <div style={{fontSize:12,color:C.text,lineHeight:1.7,marginBottom:6}}>
+              By running this simulation, you'll see how AI can improve Georgetown's traffic:
+            </div>
+            <ul style={{fontSize:11,color:C.muted,lineHeight:1.8,paddingLeft:18}}>
+              <li>✅ Reduce average waiting time by up to 40%</li>
+              <li>✅ Decrease queue lengths at intersections</li>
+              <li>✅ Increase vehicle throughput (more cars moving efficiently)</li>
+              <li>✅ Adapt to changing traffic patterns automatically</li>
+              <li>✅ Lower fuel consumption and emissions</li>
+            </ul>
+          </div>
         </div>
       </Card>
 
@@ -654,10 +823,72 @@ function OverviewTab({simState}){
   );
 }
 
-function SimulationTab({simState,fixedRef,aiRef}){
+function SimulationTab({simState,fixedRef,aiRef,onNavigate}){
   const {trained,running,currentEp,targetEps,aiStats,fixedStats,improvement,chartPoints,logEntries} = simState;
   return(
     <div className="fade-up">
+      {/* GUIDANCE BANNER */}
+      {!running && !trained && (
+        <Card style={{marginBottom:10,background:`linear-gradient(135deg,${C.green}14,${C.blue}08)`,border:`1px solid ${C.green}35`,padding:16}}>
+          <div style={{display:"flex",alignItems:"flex-start",gap:12}}>
+            <div style={{fontSize:32,flexShrink:0}}>▶️</div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:15,fontWeight:700,marginBottom:6,color:C.green}}>Ready to Run the Simulation?</div>
+              <div style={{fontSize:13,color:C.text,lineHeight:1.8,marginBottom:10}}>
+                Use the <strong>control panel at the top</strong> of this page to:
+              </div>
+              <ul style={{fontSize:12,color:C.muted,lineHeight:1.8,paddingLeft:20,marginBottom:10}}>
+                <li>Select <strong style={{color:C.text}}>number of episodes</strong> (12, 25, or 50)</li>
+                <li>Choose <strong style={{color:C.text}}>training speed</strong> (Step, Normal, or Fast)</li>
+                <li>Click the <strong style={{color:C.green}}>▶ Run simulation</strong> button</li>
+              </ul>
+              <div style={{fontSize:12,color:C.amber,background:`${C.amber}12`,padding:"8px 10px",borderRadius:8,border:`1px solid ${C.amber}28`}}>
+                💡 <strong>Tip:</strong> Start with 25 episodes at Normal speed for a good balance of learning and time (3-4 minutes)
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {running && (
+        <Card style={{marginBottom:10,background:`${C.amber}08`,border:`1px solid ${C.amber}28`,padding:14}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <div className="live-dot"/>
+            <div style={{flex:1}}>
+              <div style={{fontSize:14,fontWeight:700,color:C.amber,marginBottom:4}}>🎬 Training in Progress...</div>
+              <div style={{fontSize:12,color:C.muted}}>
+                Watch the AI learn! The right canvas shows adaptive signal control improving in real-time. Episode {currentEp} of {targetEps}
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {trained && !running && (
+        <Card style={{marginBottom:10,background:`linear-gradient(135deg,${C.green}14,${C.blue}08)`,border:`1px solid ${C.green}35`,padding:14}}>
+          <div style={{display:"flex",alignItems:"flex-start",gap:12}}>
+            <div style={{fontSize:28,flexShrink:0}}>✅</div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:14,fontWeight:700,marginBottom:4,color:C.green}}>Training Complete! {improvement}% Improvement</div>
+              <div style={{fontSize:12,color:C.muted,marginBottom:10}}>
+                The AI achieved a {improvement}% reduction in delay. Explore the results in other tabs:
+              </div>
+              <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+                <button onClick={()=>onNavigate("prediction")} style={{...mono,fontSize:10,padding:"6px 12px",borderRadius:6,border:`1px solid ${C.purple}`,background:`${C.purple}15`,color:C.purple,cursor:"pointer"}}>
+                  📊 Models Tab
+                </button>
+                <button onClick={()=>onNavigate("rl")} style={{...mono,fontSize:10,padding:"6px 12px",borderRadius:6,border:`1px solid ${C.green}`,background:`${C.green}15`,color:C.green,cursor:"pointer"}}>
+                  🤖 RL Tab
+                </button>
+                <button onClick={()=>onNavigate("feasibility")} style={{...mono,fontSize:10,padding:"6px 12px",borderRadius:6,border:`1px solid ${C.amber}`,background:`${C.amber}15`,color:C.amber,cursor:"pointer"}}>
+                  ✓ Feasib. Tab
+                </button>
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
+
       <Card style={{marginBottom:10,background:`${C.blue}08`,border:`1px solid ${C.blue}28`}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:6,color:C.blue}}>Live training — DQN vs Fixed timing</div>
         <div style={{fontSize:12,color:C.muted,lineHeight:1.7}}>
@@ -700,6 +931,18 @@ function SimulationTab({simState,fixedRef,aiRef}){
 function PredictionTab(){
   return(
     <div className="fade-up">
+      <Card style={{marginBottom:10,background:`${C.purple}08`,border:`1px solid ${C.purple}28`,padding:14}}>
+        <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
+          <div style={{fontSize:24,flexShrink:0}}>📊</div>
+          <div style={{flex:1}}>
+            <div style={{fontSize:14,fontWeight:700,marginBottom:4,color:C.purple}}>Traffic Prediction Models (RQ1)</div>
+            <div style={{fontSize:12,color:C.muted}}>
+              This tab shows how different AI models predict traffic conditions. <strong style={{color:C.text}}>Random Forest</strong> achieved the best performance with RMSE of 3.826s.
+            </div>
+          </div>
+        </div>
+      </Card>
+
       <Card style={{marginBottom:10,background:`${C.purple}08`,border:`1px solid ${C.purple}28`}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:6,color:C.purple}}>RQ1 — Traffic prediction models</div>
         <div style={{fontSize:12,color:C.muted,lineHeight:1.7}}>
@@ -758,10 +1001,32 @@ function PredictionTab(){
   );
 }
 
-function RLTab({simState}){
+function RLTab({simState,onNavigate}){
   const {trained,currentEp,targetEps,aiStats,improvement,chartPoints} = simState;
   return(
     <div className="fade-up">
+      {!trained && (
+        <Card style={{marginBottom:10,background:`${C.amber}08`,border:`1px solid ${C.amber}28`,padding:14}}>
+          <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
+            <div style={{fontSize:24,flexShrink:0}}>📊</div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:14,fontWeight:700,marginBottom:4,color:C.amber}}>Results Will Appear Here</div>
+              <div style={{fontSize:12,color:C.muted,marginBottom:8}}>
+                This tab shows detailed RL performance analysis. Run a simulation first to see:
+              </div>
+              <ul style={{fontSize:11,color:C.muted,lineHeight:1.7,paddingLeft:18}}>
+                <li>Delay and queue length improvements</li>
+                <li>Episode-by-episode learning curve</li>
+                <li>Comparison with published benchmarks</li>
+              </ul>
+              <button onClick={()=>onNavigate("simulation")} style={{...mono,fontSize:10,padding:"6px 12px",borderRadius:6,border:`1px solid ${C.green}`,background:`${C.green}15`,color:C.green,cursor:"pointer",marginTop:8}}>
+                Go to Sim Tab to Run →
+              </button>
+            </div>
+          </div>
+        </Card>
+      )}
+
       <Card style={{marginBottom:10,background:`${C.green}08`,border:`1px solid ${C.green}28`}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:6,color:C.green}}>RQ2 — RL-based adaptive signal control</div>
         <div style={{fontSize:12,color:C.muted,lineHeight:1.7}}>
@@ -845,6 +1110,18 @@ function RLTab({simState}){
 function MapTab(){
   return(
     <div className="fade-up">
+      <Card style={{marginBottom:10,background:`${C.blue}08`,border:`1px solid ${C.blue}28`,padding:14}}>
+        <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
+          <div style={{fontSize:24,flexShrink:0}}>🗺️</div>
+          <div style={{flex:1}}>
+            <div style={{fontSize:14,fontWeight:700,marginBottom:4,color:C.blue}}>Georgetown Road Network</div>
+            <div style={{fontSize:12,color:C.muted}}>
+              This map shows the real Georgetown road network imported from OpenStreetMap. The simulation uses this actual network topology with 2,646 junctions and 6,771 road segments.
+            </div>
+          </div>
+        </div>
+      </Card>
+
       <Card style={{marginBottom:10}}>
         <Label>Georgetown road network — real OSM data</Label>
         <MapCanvas/>
@@ -872,6 +1149,18 @@ function MapTab(){
 function FeasibilityTab(){
   return(
     <div className="fade-up">
+      <Card style={{marginBottom:10,background:`${C.amber}08`,border:`1px solid ${C.amber}28`,padding:14}}>
+        <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
+          <div style={{fontSize:24,flexShrink:0}}>✓</div>
+          <div style={{flex:1}}>
+            <div style={{fontSize:14,fontWeight:700,marginBottom:4,color:C.amber}}>Implementation Feasibility (RQ3)</div>
+            <div style={{fontSize:12,color:C.muted}}>
+              This tab analyzes the practical requirements for deploying AI traffic management in Georgetown, including technical infrastructure, governance readiness, and a 4-phase deployment roadmap.
+            </div>
+          </div>
+        </div>
+      </Card>
+
       <Card style={{marginBottom:10,background:`${C.amber}08`,border:`1px solid ${C.amber}28`}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:6,color:C.amber}}>RQ3 — Implementation feasibility assessment</div>
         <div style={{fontSize:12,color:C.muted,lineHeight:1.7}}>
@@ -952,7 +1241,7 @@ const TAB_CONFIG = [
 // ══════════════════════════════════════════════════════════════════════════════
 // ROOT — all simulation state lives here, flows down to every tab
 // ══════════════════════════════════════════════════════════════════════════════
-export default function GeorgetownDashboard(){
+export function GeorgetownDashboard(){
   const [tab, setTab] = useState("overview");
 
   // ── training config ──
@@ -1101,10 +1390,10 @@ export default function GeorgetownDashboard(){
   };
 
   const tabContent = {
-    overview:    <OverviewTab    simState={simState}/>,
-    simulation:  <SimulationTab simState={simState} fixedRef={fixedRef} aiRef={aiRef}/>,
+    overview:    <OverviewTab    simState={simState} onNavigate={setTab}/>,
+    simulation:  <SimulationTab simState={simState} fixedRef={fixedRef} aiRef={aiRef} onNavigate={setTab}/>,
     prediction:  <PredictionTab/>,
-    rl:          <RLTab          simState={simState}/>,
+    rl:          <RLTab          simState={simState} onNavigate={setTab}/>,
     map:         <MapTab/>,
     feasibility: <FeasibilityTab/>,
   };
@@ -1162,3 +1451,6 @@ export default function GeorgetownDashboard(){
     </div>
   );
 }
+
+
+export default GeorgetownDashboard;

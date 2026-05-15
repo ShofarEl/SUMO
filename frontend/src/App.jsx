@@ -20,6 +20,8 @@ import ResultsDashboard from './pages/ResultsDashboard';
 import AboutPage from './pages/AboutPage';
 import TrainingResultsPage from './pages/TrainingResultsPage';
 import LiveSimulationPage from './pages/LiveSimulationPage';
+import InteractiveSimulationPage from './pages/InteractiveSimulationPage';
+
 function App() {
   return (
     <Router>
@@ -43,6 +45,9 @@ function App() {
           
           {/* Live Simulation Page */}
           <Route path="/live-simulation" element={<LiveSimulationPage />} />
+          
+          {/* Interactive Simulation Page - 4-Step Guided Workflow */}
+          <Route path="/interactive-simulation" element={<InteractiveSimulationPage />} />
           
           <Route
             path="/map"
