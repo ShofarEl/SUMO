@@ -1366,12 +1366,12 @@ export function GeorgetownDashboard(){
   const runEpisode = useCallback((ep, total)=>{
     if(!runRef.current) return;
     setCurrentEp(ep);
-    const pct = ep / total;
-    const dataIdx = Math.round(pct * 49);
-    const data  = TRAINING_DATA[Math.min(dataIdx, 49)];
+    // Use actual episode number to get correct data (ep-1 because array is 0-indexed)
+    const data  = TRAINING_DATA[Math.min(ep - 1, TRAINING_DATA.length - 1)];
     const delay = data.delay;
     const queue = data.queue;
     const imp   = parseFloat(((42.71-delay)/42.71*100).toFixed(1));
+    const pct = ep / total;
     const thr   = Math.round(lerp(2545,3120,pct));
 
     setChartPoints(prev=>[...prev, {ep, delay}]);
