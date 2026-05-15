@@ -1278,7 +1278,7 @@ export function GeorgetownDashboard(){
 
   // ── training config ──
   const [targetEps, setTargetEps] = useState(50); // Default to 50 episodes to match training data
-  const [speed, setSpeed] = useState(1); // Default to Step speed for better observation
+  const [speed, setSpeed] = useState(3); // Default to Normal speed
 
   // ── training state ──
   const [running,  setRunning]  = useState(false);
@@ -1334,7 +1334,18 @@ export function GeorgetownDashboard(){
     rafRef.current = requestAnimationFrame(loop);
   },[resizeCanvas]);
 
-  useEffect(()=>{ startCanvasLoop(); return()=>{ if(rafRef.current) cancelAnimationFrame(rafRef.current); }; },[startCanvasLoop]);
+  useEffect(()=>{ 
+    // Only start canvas animation when training is complete
+    if(trained) {
+      startCanvasLoop(); 
+    } else {
+      // Stop animation if not trained
+      if(rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+      simRef.current = null;
+    }
+    return()=>{ if(rafRef.current) cancelAnimationFrame(rafRef.current); }; 
+  },[startCanvasLoop, trained]);
 
   // ── logging helper ──
   const addLog = useCallback((msg, type="dim")=>{
@@ -1437,8 +1448,8 @@ export function GeorgetownDashboard(){
       {/* ── GLOBAL HEADER ── */}
       <GlobalHeader />
 
-      {/* ── TOP-LEVEL CONTROL PANEL (Only visible in Models tab) ── */}
-      {tab === "prediction" && (
+      {/* ── TOP-LEVEL CONTROL PANEL (Only visible in Interact tab) ── */}
+      {tab === "simulation" && (
         <ControlPanel
           targetEps={targetEps}   setTargetEps={setTargetEps}
           speed={speed}           setSpeed={setSpeed}
