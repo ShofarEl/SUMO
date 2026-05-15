@@ -725,36 +725,6 @@ function OverviewTab({simState,onNavigate}){
             </div>
           </div>
 
-          <div style={{padding:12,background:"rgba(255,255,255,.02)",borderRadius:10,border:`1px solid ${C.border}`}}>
-            <div style={{fontSize:13,fontWeight:600,marginBottom:6,color:C.purple}}>🗂️ Dashboard Tabs Explained</div>
-            <div style={{display:"grid",gap:6}}>
-              <div style={{display:"flex",gap:8}}>
-                <div style={{...mono,fontSize:10,color:C.blue,background:`${C.blue}15`,padding:"2px 6px",borderRadius:4,flexShrink:0}}>Overview</div>
-                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>This page - summary and instructions</div>
-              </div>
-              <div style={{display:"flex",gap:8}}>
-                <div style={{...mono,fontSize:10,color:C.blue,background:`${C.blue}15`,padding:"2px 6px",borderRadius:4,flexShrink:0}}>Sim</div>
-                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>Watch live training with traffic visualization</div>
-              </div>
-              <div style={{display:"flex",gap:8}}>
-                <div style={{...mono,fontSize:10,color:C.blue,background:`${C.blue}15`,padding:"2px 6px",borderRadius:4,flexShrink:0}}>Models</div>
-                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>Traffic prediction model comparison (RQ1)</div>
-              </div>
-              <div style={{display:"flex",gap:8}}>
-                <div style={{...mono,fontSize:10,color:C.blue,background:`${C.blue}15`,padding:"2px 6px",borderRadius:4,flexShrink:0}}>RL</div>
-                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>Reinforcement learning results and analysis (RQ2)</div>
-              </div>
-              <div style={{display:"flex",gap:8}}>
-                <div style={{...mono,fontSize:10,color:C.blue,background:`${C.blue}15`,padding:"2px 6px",borderRadius:4,flexShrink:0}}>Map</div>
-                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>Georgetown road network from OpenStreetMap</div>
-              </div>
-              <div style={{display:"flex",gap:8}}>
-                <div style={{...mono,fontSize:10,color:C.blue,background:`${C.blue}15`,padding:"2px 6px",borderRadius:4,flexShrink:0}}>Feasib.</div>
-                <div style={{fontSize:11,color:C.muted,lineHeight:1.6}}>Implementation feasibility assessment (RQ3)</div>
-              </div>
-            </div>
-          </div>
-
           <div style={{padding:12,background:`linear-gradient(135deg,${C.green}12,${C.blue}08)`,borderRadius:10,border:`1px solid ${C.green}28`}}>
             <div style={{fontSize:13,fontWeight:600,marginBottom:6,color:C.green}}>💡 What This Means for Georgetown</div>
             <div style={{fontSize:12,color:C.text,lineHeight:1.7,marginBottom:6}}>
@@ -770,6 +740,7 @@ function OverviewTab({simState,onNavigate}){
           </div>
         </div>
       </Card>
+
 
       {trained?(
         <div style={{background:`linear-gradient(135deg,${C.green}14,${C.blue}08)`,
@@ -1466,15 +1437,17 @@ export function GeorgetownDashboard(){
       {/* ── GLOBAL HEADER ── */}
       <GlobalHeader />
 
-      {/* ── TOP-LEVEL CONTROL PANEL ── */}
-      <ControlPanel
-        targetEps={targetEps}   setTargetEps={setTargetEps}
-        speed={speed}           setSpeed={setSpeed}
-        running={running}       trained={trained}
-        currentEp={currentEp}
-        onRun={handleRun}
-        onReset={handleReset}
-      />
+      {/* ── TOP-LEVEL CONTROL PANEL (Only visible in Models tab) ── */}
+      {tab === "prediction" && (
+        <ControlPanel
+          targetEps={targetEps}   setTargetEps={setTargetEps}
+          speed={speed}           setSpeed={setSpeed}
+          running={running}       trained={trained}
+          currentEp={currentEp}
+          onRun={handleRun}
+          onReset={handleReset}
+        />
+      )}
 
       {/* ── TAB NAV (desktop) ── */}
       <nav className="top-nav" style={{
