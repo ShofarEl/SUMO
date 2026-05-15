@@ -31,8 +31,8 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
           
-          {/* Public Home Page - Elegant Dashboard */}
-          <Route path="/" element={<ElegantDashboard />} />
+          {/* Public Home Page - Live Simulation Dashboard */}
+          <Route path="/" element={<LiveSimulationPage />} />
           
           {/* Public Results Dashboard */}
           <Route path="/results" element={<ResultsDashboard />} />
@@ -40,10 +40,13 @@ function App() {
           {/* Public About Page */}
           <Route path="/about" element={<AboutPage />} />
           
+          {/* Public Elegant Dashboard */}
+          <Route path="/elegant" element={<ElegantDashboard />} />
+          
           {/* Public Training Results Page */}
           <Route path="/training-results" element={<TrainingResultsPage />} />
           
-          {/* Live Simulation Page */}
+          {/* Live Simulation Page (also accessible via /live-simulation) */}
           <Route path="/live-simulation" element={<LiveSimulationPage />} />
           
           {/* Interactive Simulation Page - 4-Step Guided Workflow */}
