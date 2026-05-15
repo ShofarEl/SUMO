@@ -825,6 +825,13 @@ function OverviewTab({simState,onNavigate}){
 
 function SimulationTab({simState,fixedRef,aiRef,onNavigate}){
   const {trained,running,currentEp,targetEps,aiStats,fixedStats,improvement,chartPoints,logEntries} = simState;
+  const [viewEpisode, setViewEpisode] = useState(targetEps);
+  
+  // Update viewEpisode when training completes
+  useEffect(()=>{
+    if(trained) setViewEpisode(targetEps);
+  },[trained,targetEps]);
+
   return(
     <div className="fade-up">
       {/* GUIDANCE BANNER */}
@@ -902,7 +909,34 @@ function SimulationTab({simState,fixedRef,aiRef,onNavigate}){
           <Label>DQN learning curve</Label>
           {trained&&<Tag color={C.green}>↓ {improvement}% improvement over {targetEps} episodes</Tag>}
         </div>
-        <DQNChart chartPoints={chartPoints} targetEps={targetEps} trained={trained}/>
+        
+        {/* Episode Checkpoint Selector */}
+        {trained && CHECKPOINTS.filter(cp=>cp<=targetEps).length>1 && (
+          <div style={{marginBottom:12}}>
+            <div style={{...mono,fontSize:10,color:C.muted,marginBottom:6,textTransform:"uppercase",letterSpacing:".06em"}}>
+              View Progress at Episode:
+            </div>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+              <button
+                onClick={()=>setViewEpisode(targetEps)}
+                style={{...mono,fontSize:11,padding:"6px 12px",borderRadius:6,border:`1px solid ${viewEpisode===targetEps?C.blue:C.border}`,background:viewEpisode===targetEps?`${C.blue}20`:"transparent",color:viewEpisode===targetEps?C.blue:C.muted,cursor:"pointer",transition:"all .15s"}}
+              >
+                All ({targetEps})
+              </button>
+              {CHECKPOINTS.filter(cp=>cp<=targetEps).map(cp=>(
+                <button
+                  key={cp}
+                  onClick={()=>setViewEpisode(cp)}
+                  style={{...mono,fontSize:11,padding:"6px 12px",borderRadius:6,border:`1px solid ${viewEpisode===cp?C.green:C.border}`,background:viewEpisode===cp?`${C.green}20`:"transparent",color:viewEpisode===cp?C.green:C.muted,cursor:"pointer",transition:"all .15s"}}
+                >
+                  EP{cp}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <DQNChart chartPoints={chartPoints.filter(pt=>pt.ep<=viewEpisode)} targetEps={viewEpisode} trained={trained}/>
         <MilestoneChips currentEp={currentEp} targetEps={targetEps}/>
         <div style={{display:"flex",gap:12,marginTop:10,flexWrap:"wrap"}}>
           {[[C.blue,"DQN delay"],[C.red,"Baseline","dashed"],[C.green,"Checkpoint","dot"]].map(([c,l,t])=>(
@@ -913,17 +947,18 @@ function SimulationTab({simState,fixedRef,aiRef,onNavigate}){
             </div>
           ))}
         </div>
+
+        {/* Training Log - Moved directly under learning curve */}
+        <div style={{marginTop:16,paddingTop:16,borderTop:`1px solid ${C.border}`}}>
+          <Label>Training log</Label>
+          <TrainingLog entries={logEntries}/>
+        </div>
       </Card>
 
       <div className="sim-grid" style={{marginBottom:10}}>
         <SimCanvasPanel title="Fixed timing" badge="BASELINE" badgeColor="red" canvasRef={fixedRef} stats={fixedStats} statColor={C.red}/>
         <SimCanvasPanel title="DQN AI agent" badge="AI CONTROL" badgeColor="green" canvasRef={aiRef} stats={aiStats} statColor={C.green}/>
       </div>
-
-      <Card>
-        <Label>Training log</Label>
-        <TrainingLog entries={logEntries}/>
-      </Card>
     </div>
   );
 }
