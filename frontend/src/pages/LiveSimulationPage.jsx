@@ -666,11 +666,6 @@ function SimulationTab({simState,fixedRef,aiRef}){
         </div>
       </Card>
 
-      <div className="sim-grid" style={{marginBottom:10}}>
-        <SimCanvasPanel title="Fixed timing" badge="BASELINE" badgeColor="red" canvasRef={fixedRef} stats={fixedStats} statColor={C.red}/>
-        <SimCanvasPanel title="DQN AI agent" badge="AI CONTROL" badgeColor="green" canvasRef={aiRef} stats={aiStats} statColor={C.green}/>
-      </div>
-
       <Card style={{marginBottom:10}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8,flexWrap:"wrap",gap:6}}>
           <Label>DQN learning curve</Label>
@@ -688,6 +683,11 @@ function SimulationTab({simState,fixedRef,aiRef}){
           ))}
         </div>
       </Card>
+
+      <div className="sim-grid" style={{marginBottom:10}}>
+        <SimCanvasPanel title="Fixed timing" badge="BASELINE" badgeColor="red" canvasRef={fixedRef} stats={fixedStats} statColor={C.red}/>
+        <SimCanvasPanel title="DQN AI agent" badge="AI CONTROL" badgeColor="green" canvasRef={aiRef} stats={aiStats} statColor={C.green}/>
+      </div>
 
       <Card>
         <Label>Training log</Label>
