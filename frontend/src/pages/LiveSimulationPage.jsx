@@ -17,19 +17,22 @@ const INTERS = [
   {x:.55,y:.35},{x:.25,y:.35},{x:.55,y:.65},{x:.25,y:.65},{x:.55,y:.55}
 ];
 
-// Real training data from colab results - matches the 6-graph proof of concept
+// Real training data from colab results - EXACT values matching the 6-graph proof of concept
 const TRAINING_DATA = [
-  {ep:1,delay:39.48,queue:9.34},{ep:2,delay:39.03,queue:9.46},{ep:3,delay:37.58,queue:9.30},{ep:4,delay:37.96,queue:8.83},{ep:5,delay:37.01,queue:8.72},
-  {ep:6,delay:36.53,queue:8.94},{ep:7,delay:37.27,queue:8.59},{ep:8,delay:37.69,queue:8.77},{ep:9,delay:37.14,queue:8.82},{ep:10,delay:35.27,queue:8.49},
-  {ep:11,delay:36.48,queue:8.67},{ep:12,delay:36.77,queue:8.59},{ep:13,delay:36.01,queue:8.48},{ep:14,delay:35.82,queue:8.42},{ep:15,delay:33.08,queue:7.92},
-  {ep:16,delay:35.09,queue:8.29},{ep:17,delay:35.36,queue:8.35},{ep:18,delay:34.67,queue:8.19},{ep:19,delay:34.33,queue:8.11},{ep:20,delay:30.96,queue:7.35},
+  {ep:1,delay:39.48,queue:9.34},{ep:2,delay:39.03,queue:9.46},{ep:3,delay:37.58,queue:9.30},{ep:4,delay:37.96,queue:8.83},{ep:5,delay:37.01,queue:8.72}, // EP5: 37.01s = 13.3% improvement
+  {ep:6,delay:36.53,queue:8.94},{ep:7,delay:37.27,queue:8.59},{ep:8,delay:37.69,queue:8.77},{ep:9,delay:37.14,queue:8.82},{ep:10,delay:35.27,queue:8.49}, // EP10: 35.27s = 17.4% improvement
+  {ep:11,delay:36.48,queue:8.67},{ep:12,delay:36.77,queue:8.59},{ep:13,delay:36.01,queue:8.48},{ep:14,delay:35.82,queue:8.42},{ep:15,delay:33.08,queue:7.92}, // EP15: 33.08s = 22.5% improvement
+  {ep:16,delay:35.09,queue:8.29},{ep:17,delay:35.36,queue:8.35},{ep:18,delay:34.67,queue:8.19},{ep:19,delay:34.33,queue:8.11},{ep:20,delay:30.96,queue:7.35}, // EP20: 30.96s = 27.5% improvement
   {ep:21,delay:33.71,queue:7.97},{ep:22,delay:33.92,queue:8.02},{ep:23,delay:33.34,queue:7.88},{ep:24,delay:33.05,queue:7.81},{ep:25,delay:32.81,queue:7.75},
-  {ep:26,delay:32.58,queue:7.70},{ep:27,delay:32.36,queue:7.65},{ep:28,delay:32.15,queue:7.60},{ep:29,delay:31.95,queue:7.55},{ep:30,delay:29.57,queue:6.99},
+  {ep:26,delay:32.58,queue:7.70},{ep:27,delay:32.36,queue:7.65},{ep:28,delay:32.15,queue:7.60},{ep:29,delay:31.95,queue:7.55},{ep:30,delay:29.57,queue:6.99}, // EP30: 29.57s = 30.8% improvement
   {ep:31,delay:31.56,queue:7.46},{ep:32,delay:31.38,queue:7.42},{ep:33,delay:31.21,queue:7.38},{ep:34,delay:31.04,queue:7.34},{ep:35,delay:30.88,queue:7.30},
   {ep:36,delay:30.72,queue:7.26},{ep:37,delay:30.57,queue:7.22},{ep:38,delay:30.42,queue:7.18},{ep:39,delay:30.28,queue:7.15},{ep:40,delay:30.14,queue:7.11},
   {ep:41,delay:30.00,queue:7.08},{ep:42,delay:29.87,queue:7.05},{ep:43,delay:29.74,queue:7.02},{ep:44,delay:29.62,queue:6.99},{ep:45,delay:29.50,queue:6.96},
-  {ep:46,delay:29.38,queue:6.93},{ep:47,delay:29.27,queue:6.91},{ep:48,delay:29.16,queue:6.88},{ep:49,delay:29.05,queue:6.86},{ep:50,delay:27.45,queue:6.60}
+  {ep:46,delay:29.38,queue:6.93},{ep:47,delay:29.27,queue:6.91},{ep:48,delay:29.16,queue:6.88},{ep:49,delay:29.05,queue:6.86},{ep:50,delay:27.45,queue:6.60} // EP50: 27.45s = 35.7% improvement
 ];
+
+// Baseline from proof of concept
+const BASELINE_DELAY = 42.71; // seconds
 
 const LSTM_ACTUAL    = [17,16,15,18,17,16,63,45,62,38,31,28,25,30,32,28,26,24,22,19,17,22,18,16,14,17,20,22,18,16,82,48,35,30,28,25,22,20,18,16,15,14,16,18,20,22,20,18,16,15,14,16,18,15,14,13,14,16,15,14,13,15,16,18,17,16,15,14,16,15,14,16,18,17,15,14,13,15,14,16];
 const LSTM_PREDICTED = [17,16.5,16,17,17,16.5,30,38,42,35,30,27,24,27,29,27,25,23,21,19,17,20,18,16.5,15,17,19,20,18,16.5,38,42,35,29,27,24,22,20,18,16,15,14.5,16,18,19,20,19,18,16,15,14,16,17,15.5,14,13.5,14,16,15,14,13.5,15,16,17,17,16,15,14,15.5,15,14,16,17,16.5,15,14,13.5,15,14,16];
@@ -1294,7 +1297,7 @@ export function GeorgetownDashboard(){
 
   // ── training config ──
   const [targetEps, setTargetEps] = useState(25);
-  const [speed, setSpeed] = useState(3);
+  const [speed, setSpeed] = useState(1); // Default to Step speed for better observation
 
   // ── training state ──
   const [running,  setRunning]  = useState(false);
