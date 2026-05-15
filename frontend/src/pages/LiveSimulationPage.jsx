@@ -1296,7 +1296,7 @@ export function GeorgetownDashboard(){
   const [tab, setTab] = useState("overview");
 
   // ── training config ──
-  const [targetEps, setTargetEps] = useState(25);
+  const [targetEps, setTargetEps] = useState(50); // Default to 50 episodes to match training data
   const [speed, setSpeed] = useState(1); // Default to Step speed for better observation
 
   // ── training state ──
