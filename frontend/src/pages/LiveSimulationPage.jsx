@@ -636,7 +636,7 @@ function OverviewTab({simState,onNavigate}){
       )}
 
       <Card style={{marginBottom:10,background:`linear-gradient(135deg,${C.blue}12,${C.purple}08)`,border:`1px solid ${C.blue}28`}}>
-        <div style={{fontSize:13,fontWeight:700,marginBottom:6,color:C.blue}}>Master's Thesis Research — Georgetown, Guyana</div>
+        <div style={{fontSize:13,fontWeight:700,marginBottom:6,color:C.blue}}>Undergraduate Degree Research — Georgetown, Guyana</div>
         <div style={{fontSize:13,color:C.text,lineHeight:1.8,marginBottom:6}}>
           <strong>Title:</strong> Application of Artificial Intelligence Techniques in Predicting and Managing Urban Traffic Congestion in Georgetown
         </div>
